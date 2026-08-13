@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary-border: var(--sidebar-primary-border);
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent-border: var(--sidebar-accent-border);
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --font-display: var(--app-font-display);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ─── LIGHT MODE — Teal Palette ────────────────────────────────────────────── */
+/* Primary Dark Teal : #033B4C  → hsl(194 92% 16%)                            */
+/* Steel Accent      : #79A7B7  → hsl(195 30% 60%)                            */
+/* Background        : #FFFFFF  → hsl(0 0% 100%)                               */
+/* Card / Sidebar    : #F4F8FA  → hsl(200 33% 97%)                             */
+/* Borders           : #CBE5EE  → hsl(195 52% 87%)                             */
+/* Primary Text      : #033B4C  → hsl(194 92% 16%)                             */
+/* Secondary Text    : #5C8395  → hsl(198 24% 47%)                             */
+:root {
+  --button-outline: rgba(3, 59, 76, .10);
+  --badge-outline: rgba(3, 59, 76, .05);
+  --opaque-button-border-intensity: -8;
+  --elevate-1: rgba(3, 59, 76, .02);
+  --elevate-2: rgba(3, 59, 76, .06);
+
+  --background:          0 0% 100%;          /* #FFFFFF */
+  --foreground:          194 92% 12%;        /* #022834 */
+  --border:              195 35% 90%;        /* #DCEBF0 */
+  --input:               195 35% 90%;
+  --ring:                195 35% 50%;        /* Teal Ring */
+
+  --card:                200 33% 97%;        /* #F4F8FA */
+  --card-foreground:     194 92% 12%;
+  --card-border:         195 35% 90%;
+
+  --popover:             0 0% 100%;
+  --popover-foreground:  194 92% 12%;
+  --popover-border:      195 35% 90%;
+
+  --primary:             194 92% 16%;        /* #033B4C */
+  --primary-foreground:  0 0% 100%;
+
+  --secondary:           200 33% 97%;        /* #F4F8FA */
+  --secondary-foreground: 194 92% 12%;
+
+  --muted:               200 33% 97%;        /* #F4F8FA */
+  --muted-foreground:    198 24% 47%;        /* #5C8395 */
+
+  --accent:              195 52% 87%;        /* #CBE5EE */
+  --accent-foreground:   194 92% 12%;
+
+  --destructive:         0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --sidebar:             200 33% 97%;        /* #F4F8FA */
+  --sidebar-foreground:  198 24% 47%;        /* #5C8395 */
+  --sidebar-border:      195 35% 90%;        /* #DCEBF0 */
+  --sidebar-primary:     194 92% 16%;        /* #033B4C */
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent:      195 52% 87%;
+  --sidebar-accent-foreground: 194 92% 12%;
+  --sidebar-ring:        195 35% 50%;
+
+  --app-font-sans: 'Inter', sans-serif;
+  --app-font-display: 'Inter Tight', sans-serif;
+  --app-font-serif: Georgia, serif;
+  --app-font-mono: Menlo, monospace;
+  --radius: 0.5rem;
+}
+
+/* ─── DARK MODE — Deep Slate Teal ────────────────────────────────────────── */
+/* Primary Accent : #79A7B7  → hsl(195 30% 60%)                              */
+/* Background     : #041B23  → hsl(195 72% 8%)                               */
+/* Card / Sidebar : #072833  → hsl(195 62% 12%)                              */
+/* Borders        : #0F3B4A  → hsl(195 66% 18%)                              */
+/* Primary Text   : #FFFFFF  → hsl(0 0% 100%)                                 */
+/* Secondary Text : #98CBD9  → hsl(193 47% 72%)                              */
+.dark {
+  --button-outline: rgba(255,255,255, .10);
+  --badge-outline: rgba(255,255,255, .05);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(255,255,255, .03);
+  --elevate-2: rgba(255,255,255, .07);
+
+  --background:          195 72% 8%;         /* #041B23 */
+  --foreground:          0 0% 100%;          /* #FFFFFF */
+  --border:              195 55% 20%;        /* #0F3B4A */
+  --input:               195 55% 20%;
+  --ring:                195 30% 60%;        /* #79A7B7 */
+
+  --card:                195 60% 12%;        /* #072833 */
+  --card-foreground:     0 0% 100%;
+  --card-border:         195 55% 20%;
+
+  --popover:             195 60% 12%;
+  --popover-foreground:  0 0% 100%;
+  --popover-border:      195 55% 20%;
+
+  --primary:             195 35% 60%;        /* #79A7B7 */
+  --primary-foreground:  195 72% 8%;
+
+  --secondary:           195 55% 20%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted:               195 60% 12%;
+  --muted-foreground:    193 47% 72%;        /* #98CBD9 */
+
+  --accent:              195 55% 20%;
+  --accent-foreground:   0 0% 100%;
+
+  --destructive:         0 63% 31%;
+  --destructive-foreground: 0 0% 100%;
+
+  --sidebar:             195 72% 8%;
+  --sidebar-foreground:  193 47% 72%;
+  --sidebar-border:      195 55% 20%;
+  --sidebar-primary:     195 35% 60%;        /* #79A7B7 */
+  --sidebar-primary-foreground: 195 72% 8%;
+  --sidebar-accent:      195 55% 20%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring:        195 30% 60%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}

@@ -1,0 +1,277 @@
+PRIORITY UPDATE — DO NOT MODIFY LANDING PAGE
+
+Focus only on missing or underdeveloped web app functionality.
+
+The current app already has landing page, registration, login, dashboard, opportunities, marketplace, templates, ventures, Co-Pilot, updates, profile, post creation, comments, reactions, follows, PostgreSQL schema, and API routes.
+
+Now improve the core Bizny functionality that is still incomplete or too shallow.
+
+1. USER-CREATED TEMPLATES
+
+Ensure users can create, edit, publish, save, clone, and start ventures from templates.
+
+Template creation fields:
+
+Title
+Main industry
+Sub-industry
+Product category
+Specific product
+Description
+Problem solved
+Required skills
+Required tools
+Required resources
+Estimated duration
+Estimated startup cost
+Milestones
+Daily progress structure
+Risks
+Expected outcomes
+Attachments
+Visibility: draft/public/private
+
+Templates must not be admin-only.
+
+2. TEMPLATE EXECUTION ENGINE
+
+When a user starts a venture from a template, generate a day-by-day execution timeline.
+
+Example:
+
+42-day poultry template should create Day 1 to Day 42.
+
+Each day should allow:
+
+Text update
+Image upload
+Video upload if feasible
+File upload
+Progress percentage
+Milestone evidence
+Timestamp
+
+Each daily update should create a Venture Progress Post in the unified feed.
+
+3. UNIFIED POST SYSTEM
+
+Do not use separate feeds.
+
+Use one unified feed with post_type behind the scenes.
+
+Post types:
+
+Share
+Question
+Request
+Opportunity
+Template
+Venture Progress
+Milestone
+Marketplace Listing
+Industry Insight
+Verification Update
+
+The floating create button should allow users to choose any of these post types.
+
+The composer should change fields based on selected post type.
+
+4. POST REACTION SYSTEM
+
+Do not use only Like.
+
+Every major post should have:
+
+Love / Useful
+Icon: heart
+Meaning: This is valuable, useful, promising, or worth supporting.
+
+Unsure
+Icon: rounded square with question mark or half-filled circle
+Meaning: I need more clarity, evidence, explanation, or verification.
+
+No thumbs-down.
+
+Post-specific actions:
+
+Question: Answer, Ask Co-Pilot
+Request: Respond, Interested, Message
+Opportunity: Apply, Interested, Message
+Template: Use Template, Clone, Save
+Venture Progress: Follow Venture, Verify, Support
+Milestone: Celebrate, Verify, Support
+Marketplace: Call, WhatsApp, Email, Request Verification
+Industry Insight: Save, Ask Co-Pilot
+Verification: Confirm, Challenge
+
+5. REQUEST POST SYSTEM
+
+Request posts are different from question posts.
+
+Question = user needs knowledge.
+
+Request = user needs action, support, resource, person, or opportunity.
+
+Request categories:
+
+Professional
+Collaborator
+Supplier
+Buyer
+Manufacturer
+Field Agent
+Funding
+Equipment
+Template
+Verification
+Location support
+Documents
+
+6. INDUSTRY TARGETS SYSTEM
+
+Add Industry Targets to the app.
+
+Each industry/sub-industry/product page should support:
+
+Current revenue estimate
+Current production volume
+Current market size
+Target revenue
+Target year
+Growth target percentage
+Progress percentage
+Required contributions
+
+Example:
+
+Okra Industry
+
+Current revenue: $100M
+2030 target: $300M
+Growth target: 300%
+Progress: 33%
+
+Required contributions:
+
+500 farmers
+50 processors
+20 exporters
+100 buyers
+50 logistics partners
+10 packaging companies
+
+7. OPPORTUNITY / INDUSTRY EXPLORER
+
+Create or improve an Explore page that allows users to browse:
+
+Industries
+Sub-industries
+Specific products
+Value chains
+Opportunities
+Templates
+Marketplace listings
+People
+Businesses
+Active ventures
+Industry targets
+
+Industry structure must support:
+
+Main industry
+Sub-industry
+Product category
+Specific product
+Value chain stage
+
+Example:
+
+Agriculture → Pepper Industry → Scotch Bonnet Pepper → Farming / Processing / Packaging / Distribution / Export
+
+Do not treat everything only as generic “Agriculture.”
+
+8. PUBLIC BUSINESS PROFILE
+
+Improve profile so businesses can show:
+
+Business name
+Business registration number
+Country
+State/city
+Industries
+Sub-industries
+Primary products
+Services
+Phone
+WhatsApp
+Email
+Marketplace listings
+Templates created
+Ventures in progress
+Milestones
+Verification status
+Public shareable URL
+
+9. FIELD AGENT WORKFLOW
+
+Do not only display verification status.
+
+Add workflow:
+
+User requests verification
+Field Agent receives request
+Field Agent uploads evidence
+Field Agent marks as verified / rejected / pending
+Verification appears on profile, listing, venture, or milestone
+
+10. NOTIFICATIONS UI
+
+API routes exist but UI is missing.
+
+Add notification bell/panel for:
+
+New comments
+Answers
+Request responses
+Opportunity interest
+Template clones
+Venture follows
+Verification updates
+Milestone confirmations
+
+11. VENTURES LIST PAGE
+
+Add dedicated Ventures page.
+
+Show:
+
+My ventures
+Followed ventures
+Public ventures
+Venture progress percentage
+Current day
+Next milestone
+Last update
+Verification status
+
+12. CO-PILOT FALLBACK
+
+If OpenAI API key or credit fails, do not break the app.
+
+Use mock AI responses.
+
+Co-Pilot must still work for demo purposes.
+
+Core Co-Pilot tasks:
+
+Help create templates
+Recommend industries
+Explain value chains
+Suggest venture milestones
+Analyze opportunities
+Help create posts
+Guide industrial enthusiasts
+
+DO NOT MODIFY LANDING PAGE IN THIS TASK.
+
+Focus only on these app systems.

@@ -1,0 +1,572 @@
+PROJECT NAME
+
+BIZNY
+
+Tagline:
+
+Reliable. Productive. Connected.
+
+Build Real Ventures Across Africa.
+
+MISSION
+
+Bizny is a productivity and coordination platform designed to help people discover opportunities, connect with collaborators, verify information, coordinate resources, and build productive ventures across Africa.
+
+Bizny is NOT a social media platform.
+
+Bizny is NOT a fintech.
+
+Bizny is NOT an e-commerce checkout platform.
+
+Bizny is a productivity network and venture coordination platform.
+
+Its purpose is to connect:
+
+People
+Skills
+Capital
+Knowledge
+Resources
+Opportunities
+
+and help transform them into productive ventures.
+
+DESIGN PHILOSOPHY
+
+The visual quality should be inspired by:
+
+Starlink
+Linear
+Stripe
+Apple
+Modern SaaS products
+
+The interface should feel:
+
+Premium
+Modern
+Industrial
+Trustworthy
+Minimal
+Professional
+
+TYPOGRAPHY
+
+Use:
+
+Headings:
+Inter Tight
+
+Body:
+Inter
+
+Fallback:
+Geist
+
+The typography should feel similar to modern technology companies.
+
+Large headlines.
+
+Strong hierarchy.
+
+Minimal clutter.
+
+VISUAL DIRECTION
+
+All imagery should focus on productive people.
+
+Do NOT use random cars or generic stock images.
+
+Use AI-generated industrial imagery featuring:
+
+Farmers
+Manufacturers
+Engineers
+Technicians
+Researchers
+Students
+Traders
+Logistics operators
+Construction workers
+Founders
+Investors
+
+Visuals should communicate:
+
+Contribution
+Coordination
+Industrial development
+Productivity
+Growth
+
+LANDING PAGE
+
+Build the landing page exactly as previously specified.
+
+Sections:
+
+Hero
+
+Problem
+
+Solution
+
+Who Bizny Is For
+
+Explore Beyond Your Industry
+
+How Bizny Helps You Build
+
+Industries
+
+Field Agent Trust Infrastructure
+
+Early Access
+
+Footer
+
+IMPORTANT MESSAGE
+
+Prominently display:
+
+Your current profession does not define the limits of your contribution.
+
+And:
+
+An industrial enthusiast today may become tomorrow's founder, investor, engineer, manufacturer, or industry leader.
+
+WHO BIZNY IS FOR
+
+Student
+
+Artisan
+
+Farmer
+
+Trader
+
+Engineer
+
+Professional
+
+Founder
+
+Investor
+
+Researcher
+
+Field Agent
+
+Industrial Enthusiast
+
+Other
+
+Industrial Enthusiast must be treated as a major role.
+
+Description:
+
+Explore industries. Discover opportunities. Learn how ventures are built. Find new ways to contribute.
+
+USER ONBOARDING
+
+Registration fields:
+
+Name
+
+Email
+
+WhatsApp
+
+Country
+
+Industry
+
+Role
+
+Skills
+
+Interests
+
+The onboarding experience should feel polished and modern.
+
+DASHBOARD
+
+After registration, users enter the Bizny dashboard.
+
+The dashboard contains:
+
+Home
+
+Opportunities
+
+Marketplace
+
+Templates
+
+Updates
+
+Co-Pilot
+
+Profile
+
+Notifications
+
+HOME FEED
+
+The home feed supports two content modes.
+
+MODE 1
+
+General Feed
+
+Similar to Facebook or LinkedIn.
+
+Reactions displayed horizontally below posts.
+
+Like
+
+Comment
+
+Share
+
+Save
+
+MODE 2
+
+Venture Progress Feed
+
+Similar to TikTok vertical interaction.
+
+Interactions appear vertically on the right side.
+
+Like
+
+Comment
+
+Progress
+
+Milestone
+
+Follow
+
+This feed is specifically for venture progress tracking.
+
+TEMPLATES SYSTEM
+
+This is one of the most important parts of Bizny.
+
+Templates represent venture blueprints.
+
+Examples:
+
+Poultry Farm
+
+Palm Oil Processing
+
+Cassava Processing
+
+Software Startup
+
+Furniture Workshop
+
+Manufacturing Plant
+
+Transportation Company
+
+Solar Installation Business
+
+Each template contains:
+
+Description
+
+Required Skills
+
+Required Resources
+
+Estimated Timeline
+
+Milestones
+
+Risk Factors
+
+Expected Outputs
+
+DAILY PROGRESS SYSTEM
+
+Every template creates a structured journey.
+
+Example:
+
+Template duration:
+
+60 days
+
+Then there should be:
+
+Day 1
+
+Day 2
+
+Day 3
+
+Day 4
+
+...
+
+Day 60
+
+Users can post:
+
+Photos
+
+Videos
+
+Documents
+
+Voice Notes
+
+Text Updates
+
+Live Streams
+
+Each update is automatically attached to the correct day and milestone.
+
+This creates a visible venture-building timeline.
+
+Example:
+
+Day 12:
+
+Equipment purchased.
+
+Day 19:
+
+Location secured.
+
+Day 32:
+
+Production begins.
+
+Day 48:
+
+First customer acquired.
+
+Day 60:
+
+Venture launched.
+
+The platform should visually display progress completion percentage.
+
+MARKETPLACE
+
+Keep marketplace extremely simple.
+
+This is NOT Amazon.
+
+This is NOT Jumia.
+
+This is NOT checkout commerce.
+
+Marketplace purpose:
+
+Discovery.
+
+Each listing contains:
+
+Business name
+
+Product
+
+Description
+
+Location
+
+Phone number
+
+WhatsApp
+
+Email
+
+Users contact sellers directly.
+
+No payment processing.
+
+No checkout.
+
+No cart.
+
+No transaction engine.
+
+Just discovery and connection.
+
+OPPORTUNITIES SECTION
+
+Users can browse:
+
+Funding Opportunities
+
+Jobs
+
+Projects
+
+Partnerships
+
+Training
+
+Industrial Opportunities
+
+Export Opportunities
+
+Research Opportunities
+
+Users can filter by:
+
+Industry
+
+Country
+
+Skill
+
+Role
+
+Investment Size
+
+CO-PILOT
+
+This is a flagship feature.
+
+Create a dedicated AI Co-Pilot.
+
+Visual identity:
+
+Friendly industrial AI assistant.
+
+The co-pilot should have a distinctive hand icon.
+
+The hand represents guidance, support, navigation, and assistance.
+
+The co-pilot helps users:
+
+Discover industries
+
+Understand opportunities
+
+Explore business models
+
+Learn venture creation
+
+Understand templates
+
+Navigate the platform
+
+Find collaborators
+
+Find resources
+
+Generate plans
+
+Generate venture roadmaps
+
+The co-pilot should feel like:
+
+An industrial mentor.
+
+Not merely a chatbot.
+
+FIELD AGENT SYSTEM
+
+Field Agents verify:
+
+Businesses
+
+Projects
+
+Locations
+
+Operations
+
+Local reputation
+
+Verification status should be visible on profiles.
+
+Verified
+
+Pending
+
+Unverified
+
+UPDATES SECTION
+
+Users can view:
+
+Recent Milestones
+
+Project Progress
+
+Template Updates
+
+Industry News
+
+Community Updates
+
+Progress updates should be timestamped.
+
+The system should emphasize:
+
+Visible progress.
+
+Visible execution.
+
+Visible milestones.
+
+CORE MESSAGE
+
+Every screen should reinforce:
+
+Reliable.
+
+Productive.
+
+Connected.
+
+And:
+
+Bizny helps productive people coordinate opportunities, resources, skills, capital, and knowledge to build real ventures across Africa.
+
+MVP PRIORITY
+
+Focus on:
+
+Landing Page
+
+Registration
+
+Dashboard
+
+Templates
+
+Progress Tracking
+
+Marketplace Directory
+
+Opportunities
+
+Co-Pilot
+
+Field Agent Verification
+
+Do NOT build:
+
+Wallets
+
+Checkout
+
+Payments
+
+Cryptocurrency
+
+Escrow
+
+Financial infrastructure
+
+Focus entirely on demonstrating venture creation, productivity coordination, opportunity discovery, and industrial development.

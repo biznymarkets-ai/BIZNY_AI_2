@@ -1,0 +1,386 @@
+BIZNY TRUST, VERIFICATION, ONBOARDING, FIELD AGENT, AND FUTURE ESCROW ARCHITECTURE
+
+Please align the app around this trust and execution model.
+
+Do not build full escrow, wallets, or payments yet.
+
+For now, build the structure, statuses, workflows, and UI placeholders so the platform is ready for future escrow integration.
+
+CORE FLOW
+
+Bizny should support this chain:
+
+User Registration
+to Industry Selection
+to Template Discovery
+to Execution
+to Milestone Evidence
+to Field Agent Verification
+to Results
+to Business Profile
+to Deal Desk
+to Future Escrow
+
+The platform should make trust, proof, and progress visible.
+
+USER REGISTRATION AND ONBOARDING
+
+Registration should be simple but complete.
+
+Step 1: Identity
+
+Full name
+Email
+Phone number
+WhatsApp number
+Country
+State or province
+City or LGA
+Password
+
+Step 2: Role
+
+User selects primary role:
+
+Producer
+Trader
+Processor
+Manufacturer
+Logistics Provider
+Professional
+Investor
+Student
+Industry Enthusiast
+Field Agent
+
+Step 3: Industries
+
+User selects specific industries, not only broad sectors.
+
+Examples:
+
+Palm Oil Processing
+Plastic Recycling
+Paper Recycling
+Water Turbines
+Cassava Starch Processing
+Soybean Processing
+Poultry Farming
+Rice Milling
+Pepper Drying
+Okra Seed Production
+
+Step 4: Optional business profile
+
+Business name
+Business registration number
+Products or services
+Business location
+Years of experience
+Website or social link
+Profile photo
+
+Step 5: Goal selection
+
+After onboarding, ask:
+
+What would you like to accomplish on Bizny?
+
+Options:
+
+Learn
+Find opportunities
+Use a template
+Build something
+Start a business
+Find suppliers
+Find buyers
+Explore industries
+Create a deal
+
+This should personalize the user's dashboard, AI suggestions, and Explore recommendations.
+
+FIELD AGENT MODEL
+
+Field Agents are economic witnesses.
+
+They are not regulators, banks, police, or guarantors.
+
+Field Agents help verify reality on the ground.
+
+They can verify:
+
+Users
+Businesses
+Locations
+Templates
+Executions
+Milestones
+Market Days
+Marketplace listings
+Deals
+Facilities
+Products
+Deliveries
+
+Verification statuses:
+
+Unverified
+Pending Review
+Community Verified
+Field Agent Verified
+Organization Verified
+Rejected
+Needs Update
+
+FIELD AGENT WORKFLOW
+
+A verification request should be created when a user needs proof.
+
+Examples:
+
+Verify business location
+Verify milestone completion
+Verify market day activity
+Verify product availability
+Verify delivery
+Verify facility
+Verify deal milestone
+
+Workflow:
+
+User requests verification.
+System creates verification request.
+Field Agent accepts or is assigned.
+Field Agent visits, reviews, or confirms remotely where acceptable.
+Field Agent uploads evidence.
+Evidence may include photos, videos, notes, documents, location stamp, and timestamp.
+Field Agent submits verification result.
+System updates the related object status.
+
+Verification evidence should be attached to the relevant object:
+
+Profile
+Business
+Execution
+Milestone
+Marketplace listing
+Deal
+Market Day
+
+EXECUTION COMPLETION FLOW
+
+When a user clicks Use This Template, create an Execution Instance.
+
+The Execution Instance inherits:
+
+Template milestones
+Template duration
+Template evidence requirements
+Template resources
+Template industry tags
+Template risk notes
+
+Milestone completion should require evidence.
+
+Accepted evidence:
+
+Photo
+Video
+Audio
+PDF
+Document
+Spreadsheet
+Text note
+Link
+
+For physical activity, strongly encourage at least one one-minute video.
+
+When a milestone is completed:
+
+Create a Progress Post automatically in the unified feed.
+
+Progress Post should show:
+
+User
+Original template
+Execution title
+Milestone number
+Progress percentage
+Location
+Industry stamp
+Evidence preview
+Timestamp
+Verification status
+
+BUSINESS OWNER COMPLETION AND CONFIRMATION
+
+For executions that become business activity, allow the user to click:
+
+Turn Into Business
+
+This should create or connect a Business Profile.
+
+Business profile should inherit proof from the execution.
+
+Example:
+
+Execution completed 18 milestones.
+Uploaded 7 videos.
+Uploaded 20 photos.
+Field Agent verified 4 milestones.
+
+This becomes credibility on the business profile.
+
+DEAL DESK FLOW
+
+Deal Desk should support structured collaboration and trade.
+
+Deal creation sources:
+
+Request post
+Opportunity post
+Marketplace listing
+Execution
+Business profile
+Template
+Direct invitation
+
+Deal statuses:
+
+Draft
+Negotiating
+Agreement Draft
+Awaiting Party Confirmation
+Awaiting Witness Confirmation
+Awaiting Field Agent Review
+Active
+Milestone In Progress
+Completed
+Cancelled
+Disputed
+
+Deal should include:
+
+Parties
+Deal type
+Industry
+Specific product or activity
+Location
+Description
+Contribution of each party
+Timeline
+Milestones
+Documents
+Witnesses
+Field agent requirement
+AI summary
+Risk notes
+Disclaimer
+Confirmation logs
+
+PARTY AGREEMENT FLOW
+
+A deal should not become active immediately.
+
+Flow:
+
+Deal draft created.
+Parties review terms.
+AI summarizes deal in plain language.
+Parties edit terms if needed.
+Witnesses are added if needed.
+Field Agent verification is requested if physical asset, location, product, facility, delivery, or milestone is involved.
+Each party clicks: I have reviewed and agree to these terms.
+System records timestamp.
+Deal becomes Active.
+
+MILESTONE COMPLETION IN DEALS
+
+Deal milestones should require proof.
+
+Supplier or executing party uploads evidence.
+Buyer or receiving party confirms.
+Field Agent can verify where needed.
+System updates milestone status.
+
+Milestone statuses:
+
+Not Started
+In Progress
+Submitted
+Confirmed
+Field Agent Verified
+Rejected
+Disputed
+
+FUTURE ESCROW STRUCTURE
+
+Do not build real escrow yet.
+
+But design statuses and UI placeholders for future escrow.
+
+Future escrow concept:
+
+Funds are held by Bizny or a licensed escrow/payment partner.
+Funds are released only after milestone completion and confirmation.
+Buyer confirmation or Field Agent verification may be required.
+Disputed milestones should pause release.
+
+For now, show escrow as:
+
+Coming Soon
+Future Trust Feature
+Not Active Yet
+
+Do not process payments.
+Do not create wallets.
+Do not create withdrawable balances.
+Do not create Bizny Coin yet.
+
+DEAL DESK DISCLAIMER
+
+Display this disclaimer in Deal Desk:
+
+Bizny provides a coordination interface to help users structure, document, verify, and track deals. Bizny is not a bank, escrow provider, legal representative, guarantor, investment advisor, or law enforcement body.
+
+Users are responsible for performing their own due diligence, verifying identities, reviewing documents, confirming business registration, inspecting locations, and seeking independent legal, financial, or professional advice before entering any agreement.
+
+Bizny encourages milestone-based execution, field agent verification, witness confirmation, and careful review before proceeding with any deal.
+
+AI ROLE
+
+AI should not verify reality.
+
+AI should not release funds.
+
+AI should not replace legal advice.
+
+AI should coordinate, summarize, remind, and recommend.
+
+AI should help with:
+
+Deal summaries
+Missing information
+Risk reminders
+Milestone reminders
+Execution coaching
+Supplier suggestions
+Opportunity suggestions
+Template recommendations
+Verification reminders
+
+FINAL PRINCIPLE
+
+Bizny's trust loop is:
+
+Knowledge
+to Execution
+to Evidence
+to Verification
+to Reputation
+to Business
+to Deal
+to Growth
+
+Every feature should support this trust loop.

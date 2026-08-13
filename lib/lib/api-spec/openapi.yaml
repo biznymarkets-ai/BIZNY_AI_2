@@ -1,0 +1,3471 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Bizny API - Productivity and venture coordination platform
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: users
+    description: User profiles
+  - name: opportunities
+    description: Opportunities discovery
+  - name: marketplace
+    description: Marketplace listings
+  - name: templates
+    description: Venture templates
+  - name: ventures
+    description: Active ventures
+  - name: feed
+    description: Feed posts
+  - name: copilot
+    description: AI Co-Pilot
+  - name: updates
+    description: Platform updates
+  - name: deals
+    description: Deal Desk coordination
+  - name: notifications
+    description: Notifications
+  - name: dashboard
+    description: Dashboard stats
+  - name: openai
+    description: OpenAI AI chat operations
+  - name: industryTargets
+    description: Industry growth targets
+  - name: fieldAgent
+    description: Field agent verification workflow
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistration"
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all users (directory)
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: role
+          in: query
+          schema:
+            type: string
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: country
+          in: query
+          schema:
+            type: string
+        - name: stateCity
+          in: query
+          schema:
+            type: string
+        - name: verificationStatus
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserPublic"
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{id}/follow:
+    post:
+      operationId: followUser
+      tags: [users]
+      summary: Follow a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FollowStatus"
+    delete:
+      operationId: unfollowUser
+      tags: [users]
+      summary: Unfollow a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FollowStatus"
+
+  /users/{id}/follow-status:
+    get:
+      operationId: getFollowStatus
+      tags: [users]
+      summary: Get follow relationship status with another user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FollowStatus"
+
+  /users/{id}/followers:
+    get:
+      operationId: listFollowers
+      tags: [users]
+      summary: List followers of a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserMini"
+
+  /users/{id}/following:
+    get:
+      operationId: listFollowing
+      tags: [users]
+      summary: List users a user is following
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserMini"
+
+  /users/{id}/posts:
+    get:
+      operationId: listUserPosts
+      tags: [users]
+      summary: List posts by a user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+
+  /opportunities:
+    get:
+      operationId: listOpportunities
+      tags: [opportunities]
+      summary: List opportunities
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: country
+          in: query
+          schema:
+            type: string
+        - name: role
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Opportunity"
+    post:
+      operationId: createOpportunity
+      tags: [opportunities]
+      summary: Create an opportunity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpportunityInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Opportunity"
+
+  /opportunities/{id}:
+    get:
+      operationId: getOpportunity
+      tags: [opportunities]
+      summary: Get opportunity details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Opportunity"
+
+  /marketplace:
+    get:
+      operationId: listListings
+      tags: [marketplace]
+      summary: List marketplace listings
+      parameters:
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: country
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Listing"
+    post:
+      operationId: createListing
+      tags: [marketplace]
+      summary: Create a marketplace listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListingInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Listing"
+
+  /marketplace/{id}:
+    get:
+      operationId: getListing
+      tags: [marketplace]
+      summary: Get listing details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Listing"
+
+  /templates:
+    get:
+      operationId: listTemplates
+      tags: [templates]
+      summary: List venture templates
+      parameters:
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: creatorId
+          in: query
+          schema:
+            type: integer
+        - name: visibility
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VentureTemplate"
+    post:
+      operationId: createTemplate
+      tags: [templates]
+      summary: Create a new venture template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VentureTemplateInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VentureTemplate"
+
+  /templates/{id}:
+    get:
+      operationId: getTemplate
+      tags: [templates]
+      summary: Get template details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VentureTemplate"
+    put:
+      operationId: updateTemplate
+      tags: [templates]
+      summary: Update a venture template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VentureTemplateInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VentureTemplate"
+    delete:
+      operationId: deleteTemplate
+      tags: [templates]
+      summary: Delete a venture template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /templates/{id}/clone:
+    post:
+      operationId: cloneTemplate
+      tags: [templates]
+      summary: Clone a template to your library
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: Cloned template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VentureTemplate"
+
+  /templates/{id}/follow:
+    post:
+      operationId: followTemplate
+      tags: [templates]
+      summary: Follow a template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Followed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+    delete:
+      operationId: unfollowTemplate
+      tags: [templates]
+      summary: Unfollow a template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Unfollowed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+
+  /templates/{id}/save:
+    post:
+      operationId: saveTemplate
+      tags: [templates]
+      summary: Save a template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Saved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+    delete:
+      operationId: unsaveTemplate
+      tags: [templates]
+      summary: Unsave a template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Unsaved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+
+  /templates/{id}/adopt:
+    post:
+      operationId: adoptTemplate
+      tags: [templates]
+      summary: Adopt a template — creates an execution instance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                instanceType:
+                  type: string
+                country:
+                  type: string
+                stateCity:
+                  type: string
+                startDate:
+                  type: string
+      responses:
+        "201":
+          description: Execution instance created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecutionInstance"
+
+  /templates/{id}/fork:
+    post:
+      operationId: forkTemplate
+      tags: [templates]
+      summary: Fork a template to create a customised copy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+      responses:
+        "201":
+          description: Forked template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VentureTemplate"
+
+  /templates/{id}/status:
+    get:
+      operationId: getTemplateStatus
+      tags: [templates]
+      summary: Get follow/save status of a template for the current user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  following:
+                    type: boolean
+                  saved:
+                    type: boolean
+
+  /execution-instances:
+    get:
+      operationId: listExecutionInstances
+      tags: [execution-instances]
+      summary: List the current user's execution instances
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExecutionInstance"
+    post:
+      operationId: createExecutionInstance
+      tags: [execution-instances]
+      summary: Create a standalone execution instance (no template)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExecutionInstanceInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecutionInstance"
+
+  /execution-instances/{id}:
+    get:
+      operationId: getExecutionInstance
+      tags: [execution-instances]
+      summary: Get a single execution instance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecutionInstance"
+    patch:
+      operationId: updateExecutionInstance
+      tags: [execution-instances]
+      summary: Update an execution instance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExecutionInstanceUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecutionInstance"
+    delete:
+      operationId: deleteExecutionInstance
+      tags: [execution-instances]
+      summary: Delete an execution instance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /execution-instances/{id}/milestones/{index}/complete:
+    post:
+      operationId: completeMilestone
+      tags: [execution-instances]
+      summary: Mark a milestone complete and auto-publish a progress post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: index
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evidenceUrls:
+                  type: array
+                  items:
+                    type: string
+                notes:
+                  type: string
+      responses:
+        "200":
+          description: Milestone completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecutionInstance"
+
+  /execution-instances/{id}/milestones/{index}/uncomplete:
+    post:
+      operationId: uncompleteMilestone
+      tags: [execution-instances]
+      summary: Unmark a milestone as complete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: index
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Milestone uncompleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecutionInstance"
+
+  /ventures:
+    get:
+      operationId: listVentures
+      tags: [ventures]
+      summary: List user's active ventures
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Venture"
+    post:
+      operationId: createVenture
+      tags: [ventures]
+      summary: Start a venture from a template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VentureInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Venture"
+
+  /ventures/{id}:
+    get:
+      operationId: getVenture
+      tags: [ventures]
+      summary: Get venture details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Venture"
+
+  /ventures/{id}/progress:
+    get:
+      operationId: getVentureProgress
+      tags: [ventures]
+      summary: Get venture daily progress entries
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgressEntry"
+    post:
+      operationId: addProgressEntry
+      tags: [ventures]
+      summary: Add a daily progress entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProgressEntryInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgressEntry"
+
+  /feed:
+    get:
+      operationId: listFeed
+      tags: [feed]
+      summary: Get unified feed posts
+      parameters:
+        - name: postType
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+    post:
+      operationId: createPost
+      tags: [feed]
+      summary: Create a post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
+  /feed/{id}/react:
+    post:
+      operationId: reactToPost
+      tags: [feed]
+      summary: React to a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReactionInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
+  /feed/{id}/comments:
+    get:
+      operationId: listPostComments
+      tags: [feed]
+      summary: List comments on a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PostComment"
+    post:
+      operationId: createPostComment
+      tags: [feed]
+      summary: Add a comment to a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostCommentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostComment"
+
+  /feed/{id}/repost:
+    post:
+      operationId: repostPost
+      tags: [feed]
+      summary: Repost a post (direct or with quote)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RepostInput"
+      responses:
+        "201":
+          description: Created repost
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
+  /feed/{id}/save:
+    post:
+      operationId: savePost
+      tags: [feed]
+      summary: Save a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveStatus"
+    delete:
+      operationId: unsavePost
+      tags: [feed]
+      summary: Unsave a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveStatus"
+
+  /openai/conversations:
+    get:
+      operationId: listOpenaiConversations
+      tags: [openai]
+      summary: List all conversations
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiConversation"
+    post:
+      operationId: createOpenaiConversation
+      tags: [openai]
+      summary: Create a new conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenaiConversationInput"
+      responses:
+        "201":
+          description: Created conversation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversation"
+
+  /openai/conversations/{id}:
+    get:
+      operationId: getOpenaiConversation
+      tags: [openai]
+      summary: Get conversation with messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Conversation with messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiConversationWithMessages"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+    delete:
+      operationId: deleteOpenaiConversation
+      tags: [openai]
+      summary: Delete a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenaiError"
+
+  /openai/conversations/{id}/messages:
+    get:
+      operationId: listOpenaiMessages
+      tags: [openai]
+      summary: List messages in a conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OpenaiMessage"
+    post:
+      operationId: sendOpenaiMessage
+      tags: [openai]
+      summary: Send a text message and receive a streaming text response
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenaiMessageInput"
+      responses:
+        "200":
+          description: SSE stream of assistant text chunks
+          content:
+            text/event-stream: {}
+
+  /copilot/chat:
+    post:
+      operationId: chatWithCopilot
+      tags: [copilot]
+      summary: Send a message to the AI Co-Pilot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CopilotMessage"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CopilotResponse"
+
+  /copilot/history:
+    get:
+      operationId: getCopilotHistory
+      tags: [copilot]
+      summary: Get copilot conversation history
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CopilotConversation"
+
+  /updates:
+    get:
+      operationId: listUpdates
+      tags: [updates]
+      summary: Get platform updates and milestones
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Update"
+
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: Get user notifications
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+    patch:
+      operationId: markNotificationsRead
+      tags: [notifications]
+      summary: Mark notifications as read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationMarkRead"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /notifications/unread-count:
+    get:
+      operationId: getUnreadNotificationCount
+      tags: [notifications]
+      summary: Get count of unread notifications
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnreadCount"
+
+  /ventures/public:
+    get:
+      operationId: listPublicVentures
+      tags: [ventures]
+      summary: List public ventures from all users
+      parameters:
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VenturePublic"
+
+  /deal-desk:
+    get:
+      operationId: listDeals
+      tags: [deals]
+      summary: List deals for current user
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: role
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Deal"
+    post:
+      operationId: createDeal
+      tags: [deals]
+      summary: Create a new deal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DealInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deal"
+
+  /deal-desk/{id}:
+    get:
+      operationId: getDeal
+      tags: [deals]
+      summary: Get deal details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deal"
+    put:
+      operationId: updateDeal
+      tags: [deals]
+      summary: Update a deal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DealInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deal"
+
+  /deal-desk/{id}/agree:
+    post:
+      operationId: agreeToDeal
+      tags: [deals]
+      summary: Agree to a deal as a party
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deal"
+
+  /deal-desk/{id}/parties:
+    post:
+      operationId: addDealParty
+      tags: [deals]
+      summary: Add a party to a deal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddPartyInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DealParty"
+
+  /deal-desk/{id}/witnesses:
+    post:
+      operationId: addDealWitness
+      tags: [deals]
+      summary: Add a witness to a deal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DealWitnessInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DealWitness"
+
+  /deal-desk/{id}/copilot:
+    post:
+      operationId: getDealCopilotSummary
+      tags: [deals]
+      summary: Generate Co-Pilot risk/summary analysis for a deal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [summary]
+                properties:
+                  summary:
+                    type: string
+
+  /users/{id}/request-verification:
+    post:
+      operationId: requestVerification
+      tags: [fieldAgent]
+      summary: Request field agent verification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerificationRequestInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationRequest"
+
+  /verification-requests:
+    get:
+      operationId: listVerificationRequests
+      tags: [fieldAgent]
+      summary: List verification requests (for field agents)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VerificationRequest"
+
+  /verification-requests/{id}/status:
+    patch:
+      operationId: updateVerificationStatus
+      tags: [fieldAgent]
+      summary: Update verification request status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerificationStatusUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationRequest"
+
+  /industry-targets:
+    get:
+      operationId: listIndustryTargets
+      tags: [industryTargets]
+      summary: List industry growth targets
+      parameters:
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: subIndustry
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IndustryTarget"
+    post:
+      operationId: createIndustryTarget
+      tags: [industryTargets]
+      summary: Create an industry target
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IndustryTargetInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndustryTarget"
+
+  /industry-targets/{id}:
+    get:
+      operationId: getIndustryTarget
+      tags: [industryTargets]
+      summary: Get industry target details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndustryTarget"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get dashboard overview stats
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /industries:
+    get:
+      operationId: listIndustries
+      tags: [dashboard]
+      summary: List industries
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Industry"
+
+  /innovations:
+    get:
+      operationId: listInnovations
+      tags: [innovations]
+      summary: List innovations with optional filters
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+        - name: industry
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: mine
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of innovations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Innovation"
+    post:
+      operationId: createInnovation
+      tags: [innovations]
+      summary: Create a new innovation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InnovationInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Innovation"
+
+  /innovations/{id}:
+    get:
+      operationId: getInnovation
+      tags: [innovations]
+      summary: Get an innovation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Innovation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Innovation"
+    put:
+      operationId: updateInnovation
+      tags: [innovations]
+      summary: Update an innovation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InnovationInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Innovation"
+    delete:
+      operationId: deleteInnovation
+      tags: [innovations]
+      summary: Delete an innovation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /innovations/{id}/solutions:
+    get:
+      operationId: listInnovationSolutions
+      tags: [innovations]
+      summary: List solutions for a challenge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of solutions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InnovationSolution"
+    post:
+      operationId: submitInnovationSolution
+      tags: [innovations]
+      summary: Submit a solution for a challenge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InnovationSolutionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InnovationSolution"
+
+  /innovations/{id}/react:
+    post:
+      operationId: reactToInnovation
+      tags: [innovations]
+      summary: Love or un-love an innovation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated reaction
+
+  /innovations/{id}/follow:
+    post:
+      operationId: followInnovation
+      tags: [innovations]
+      summary: Follow an innovation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Following
+    delete:
+      operationId: unfollowInnovation
+      tags: [innovations]
+      summary: Unfollow an innovation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Unfollowed
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    UserRegistration:
+      type: object
+      required: [name, email, whatsapp, country, industry, role]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        whatsapp:
+          type: string
+        country:
+          type: string
+        industry:
+          type: string
+        role:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        interests:
+          type: array
+          items:
+            type: string
+
+    LoginInput:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    AuthResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      required: [id, name, email, country, industry, role, verificationStatus, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        whatsapp:
+          type: ["string", "null"]
+        country:
+          type: string
+        industry:
+          type: string
+        role:
+          type: string
+        bio:
+          type: ["string", "null"]
+        skills:
+          type: array
+          items:
+            type: string
+        interests:
+          type: array
+          items:
+            type: string
+        verificationStatus:
+          type: string
+          enum: [unverified, pending, verified]
+        avatarUrl:
+          type: ["string", "null"]
+        isBusiness:
+          type: boolean
+        businessName:
+          type: ["string", "null"]
+        businessRegistrationNumber:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        subIndustries:
+          type: array
+          items:
+            type: string
+        primaryProducts:
+          type: array
+          items:
+            type: string
+        services:
+          type: array
+          items:
+            type: string
+        phone:
+          type: ["string", "null"]
+        website:
+          type: ["string", "null"]
+        publicSlug:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        bio:
+          type: string
+        whatsapp:
+          type: string
+        country:
+          type: string
+        industry:
+          type: string
+        role:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        interests:
+          type: array
+          items:
+            type: string
+        avatarUrl:
+          type: string
+        isBusiness:
+          type: boolean
+        businessName:
+          type: string
+        businessRegistrationNumber:
+          type: string
+        stateCity:
+          type: string
+        subIndustries:
+          type: array
+          items:
+            type: string
+        primaryProducts:
+          type: array
+          items:
+            type: string
+        services:
+          type: array
+          items:
+            type: string
+        phone:
+          type: string
+        website:
+          type: string
+        publicSlug:
+          type: string
+
+    Opportunity:
+      type: object
+      required: [id, title, type, industry, country, description, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+          enum: [funding, job, project, partnership, training, industrial, export, research]
+        industry:
+          type: string
+        country:
+          type: string
+        description:
+          type: string
+        role:
+          type: ["string", "null"]
+        investmentSize:
+          type: ["string", "null"]
+        deadline:
+          type: ["string", "null"]
+        postedBy:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+
+    OpportunityInput:
+      type: object
+      required: [title, type, industry, country, description]
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+        industry:
+          type: string
+        country:
+          type: string
+        description:
+          type: string
+        role:
+          type: string
+        investmentSize:
+          type: string
+        deadline:
+          type: string
+
+    Listing:
+      type: object
+      required: [id, businessName, product, description, location, country, industry, createdAt]
+      properties:
+        id:
+          type: integer
+        businessName:
+          type: string
+        product:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+        industry:
+          type: string
+        phone:
+          type: ["string", "null"]
+        whatsapp:
+          type: ["string", "null"]
+        email:
+          type: ["string", "null"]
+        isVerified:
+          type: boolean
+        postedBy:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+
+    ListingInput:
+      type: object
+      required: [businessName, product, description, location, country, industry]
+      properties:
+        businessName:
+          type: string
+        product:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+        industry:
+          type: string
+        phone:
+          type: string
+        whatsapp:
+          type: string
+        email:
+          type: string
+
+    VentureTemplate:
+      type: object
+      required: [id, title, industry, description, durationDays, requiredSkills, requiredResources, estimatedTimeline, milestones, riskFactors, expectedOutputs, visibility, cloneCount, useCount, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        industry:
+          type: string
+        subIndustry:
+          type: ["string", "null"]
+        productCategory:
+          type: ["string", "null"]
+        specificProduct:
+          type: ["string", "null"]
+        description:
+          type: string
+        problemSolved:
+          type: ["string", "null"]
+        durationDays:
+          type: integer
+        requiredSkills:
+          type: array
+          items:
+            type: string
+        requiredTools:
+          type: array
+          items:
+            type: string
+        requiredResources:
+          type: array
+          items:
+            type: string
+        estimatedTimeline:
+          type: string
+        estimatedStartupCost:
+          type: ["number", "null"]
+        milestones:
+          type: array
+          items:
+            $ref: "#/components/schemas/Milestone"
+        dailyStructure:
+          type: array
+          items:
+            type: object
+        riskFactors:
+          type: array
+          items:
+            type: string
+        expectedOutputs:
+          type: array
+          items:
+            type: string
+        coverImageUrl:
+          type: ["string", "null"]
+        attachments:
+          type: array
+          items:
+            type: string
+        visibility:
+          type: string
+          enum: [draft, public, private]
+        creatorId:
+          type: ["integer", "null"]
+        cloneCount:
+          type: integer
+        useCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        templateType:
+          type: ["string", "null"]
+        tags:
+          type: array
+          items:
+            type: string
+        difficulty:
+          type: ["string", "null"]
+          enum: [beginner, intermediate, advanced, null]
+        followCount:
+          type: integer
+        saveCount:
+          type: integer
+        adoptionCount:
+          type: integer
+        forkCount:
+          type: integer
+        forkedFromId:
+          type: ["integer", "null"]
+        audioDescription:
+          type: ["string", "null"]
+
+    ExecutionInstance:
+      type: object
+      required: [id, ownerId, title, status, progressPercent, milestones, createdAt]
+      properties:
+        id:
+          type: integer
+        templateId:
+          type: ["integer", "null"]
+        ownerId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        instanceType:
+          type: string
+        status:
+          type: string
+          enum: [active, paused, completed, abandoned]
+        country:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        startDate:
+          type: ["string", "null"]
+        targetEndDate:
+          type: ["string", "null"]
+        progressPercent:
+          type: integer
+        milestones:
+          type: array
+          items:
+            type: object
+        coverImageUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ExecutionInstanceInput:
+      type: object
+      required: [title]
+      properties:
+        templateId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        instanceType:
+          type: string
+        country:
+          type: string
+        stateCity:
+          type: string
+        startDate:
+          type: string
+        targetEndDate:
+          type: string
+
+    ExecutionInstanceUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [active, paused, completed, abandoned]
+        country:
+          type: string
+        stateCity:
+          type: string
+        targetEndDate:
+          type: string
+        coverImageUrl:
+          type: string
+
+    VentureTemplateInput:
+      type: object
+      required: [title, industry, description, durationDays, estimatedTimeline]
+      properties:
+        title:
+          type: string
+        industry:
+          type: string
+        subIndustry:
+          type: string
+        productCategory:
+          type: string
+        specificProduct:
+          type: string
+        description:
+          type: string
+        problemSolved:
+          type: string
+        durationDays:
+          type: integer
+        requiredSkills:
+          type: array
+          items:
+            type: string
+        requiredTools:
+          type: array
+          items:
+            type: string
+        requiredResources:
+          type: array
+          items:
+            type: string
+        estimatedTimeline:
+          type: string
+        estimatedStartupCost:
+          type: number
+        milestones:
+          type: array
+          items:
+            $ref: "#/components/schemas/Milestone"
+        dailyStructure:
+          type: array
+          items:
+            type: object
+        riskFactors:
+          type: array
+          items:
+            type: string
+        expectedOutputs:
+          type: array
+          items:
+            type: string
+        coverImageUrl:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+        visibility:
+          type: string
+          enum: [draft, public, private]
+
+    Milestone:
+      type: object
+      required: [day, title, description]
+      properties:
+        day:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+
+    Venture:
+      type: object
+      required: [id, title, userId, status, currentDay, progressPercent, startedAt, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        templateId:
+          type: ["integer", "null"]
+        userId:
+          type: integer
+        status:
+          type: string
+          enum: [active, paused, completed, abandoned]
+        currentDay:
+          type: integer
+        progressPercent:
+          type: number
+        description:
+          type: ["string", "null"]
+        problem:
+          type: ["string", "null"]
+        mainIndustry:
+          type: ["string", "null"]
+        subIndustry:
+          type: ["string", "null"]
+        activityTag:
+          type: ["string", "null"]
+        valueChainStage:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        localArea:
+          type: ["string", "null"]
+        ventureType:
+          type: ["string", "null"]
+        estimatedDuration:
+          type: ["string", "null"]
+        fundingRequired:
+          type: ["string", "null"]
+        expectedOutput:
+          type: ["string", "null"]
+        visibility:
+          type: string
+          enum: [public, private]
+        milestones:
+          type: array
+          items:
+            type: object
+        collaboratorsNeeded:
+          type: array
+          items:
+            type: string
+        resourcesNeeded:
+          type: array
+          items:
+            type: string
+        equipmentNeeded:
+          type: array
+          items:
+            type: string
+        template:
+          $ref: "#/components/schemas/VentureTemplate"
+        startedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    VentureInput:
+      type: object
+      required: [title]
+      properties:
+        templateId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        problem:
+          type: string
+        mainIndustry:
+          type: string
+        subIndustry:
+          type: string
+        activityTag:
+          type: string
+        valueChainStage:
+          type: string
+        country:
+          type: string
+        stateCity:
+          type: string
+        localArea:
+          type: string
+        ventureType:
+          type: string
+        estimatedDuration:
+          type: string
+        fundingRequired:
+          type: string
+        expectedOutput:
+          type: string
+        visibility:
+          type: string
+          enum: [public, private]
+        milestones:
+          type: array
+          items:
+            type: object
+        collaboratorsNeeded:
+          type: array
+          items:
+            type: string
+        resourcesNeeded:
+          type: array
+          items:
+            type: string
+        equipmentNeeded:
+          type: array
+          items:
+            type: string
+
+    ProgressEntry:
+      type: object
+      required: [id, ventureId, dayNumber, content, contentType, createdAt]
+      properties:
+        id:
+          type: integer
+        ventureId:
+          type: integer
+        dayNumber:
+          type: integer
+        content:
+          type: string
+        contentType:
+          type: string
+          enum: [text, photo, video, document, voice, livestream]
+        milestone:
+          type: ["string", "null"]
+        mediaUrl:
+          type: ["string", "null"]
+        author:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+
+    ProgressEntryInput:
+      type: object
+      required: [dayNumber, content, contentType]
+      properties:
+        dayNumber:
+          type: integer
+        content:
+          type: string
+        contentType:
+          type: string
+        milestone:
+          type: string
+        mediaUrl:
+          type: string
+
+    Post:
+      type: object
+      required: [id, content, author, postType, loves, unsures, comments, shares, saves, createdAt]
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        author:
+          $ref: "#/components/schemas/UserMini"
+        postType:
+          type: string
+          enum: [share, question, request, opportunity, template, venture_progress, milestone, marketplace_listing, industry_insight, verification_update, innovation_idea, innovation_challenge]
+        ventureId:
+          type: ["integer", "null"]
+        templateId:
+          type: ["integer", "null"]
+        mediaUrl:
+          type: ["string", "null"]
+        loves:
+          type: integer
+        unsures:
+          type: integer
+        likes:
+          type: integer
+        comments:
+          type: integer
+        shares:
+          type: integer
+        saves:
+          type: integer
+        progressPercent:
+          type: ["number", "null"]
+        milestoneTag:
+          type: ["string", "null"]
+        requestCategory:
+          type: ["string", "null"]
+        locationName:
+          type: ["string", "null"]
+        locationCoords:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        localArea:
+          type: ["string", "null"]
+        mainIndustry:
+          type: ["string", "null"]
+        subIndustry:
+          type: ["string", "null"]
+        activityTag:
+          type: ["string", "null"]
+        valueChainStage:
+          type: ["string", "null"]
+        mediaUrls:
+          type: array
+          items:
+            type: string
+          nullable: true
+        linkUrl:
+          type: ["string", "null"]
+        userReaction:
+          type: ["string", "null"]
+        repostOf:
+          type: ["integer", "null"]
+        repostComment:
+          type: ["string", "null"]
+        reposts:
+          type: integer
+        isSaved:
+          type: boolean
+        originalPost:
+          $ref: "#/components/schemas/Post"
+        createdAt:
+          type: string
+          format: date-time
+
+    PostInput:
+      type: object
+      required: [content, postType]
+      properties:
+        content:
+          type: string
+        postType:
+          type: string
+          enum: [share, question, request, opportunity, template, venture_progress, milestone, marketplace_listing, industry_insight, verification_update, innovation_idea, innovation_challenge]
+        ventureId:
+          type: integer
+        templateId:
+          type: integer
+        mediaUrl:
+          type: string
+        mediaUrls:
+          type: array
+          items:
+            type: string
+        linkUrl:
+          type: string
+        milestoneTag:
+          type: string
+        requestCategory:
+          type: string
+        progressPercent:
+          type: number
+        locationName:
+          type: string
+        locationCoords:
+          type: string
+        stateCity:
+          type: string
+        localArea:
+          type: string
+        mainIndustry:
+          type: string
+        subIndustry:
+          type: string
+        activityTag:
+          type: string
+        valueChainStage:
+          type: string
+
+    ReactionInput:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+          enum: [love, unsure]
+
+    PostComment:
+      type: object
+      required: [id, postId, content, author, createdAt]
+      properties:
+        id:
+          type: integer
+        postId:
+          type: integer
+        content:
+          type: string
+        author:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+
+    PostCommentInput:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+
+    CopilotMessage:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        context:
+          type: ["string", "null"]
+
+    CopilotResponse:
+      type: object
+      required: [reply, sessionId]
+      properties:
+        reply:
+          type: string
+        sessionId:
+          type: string
+        suggestedActions:
+          type: array
+          items:
+            type: string
+
+    CopilotConversation:
+      type: object
+      required: [id, message, reply, createdAt]
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+        reply:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    Update:
+      type: object
+      required: [id, title, type, content, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+          enum: [milestone, progress, template, industry_news, community]
+        content:
+          type: string
+        author:
+          $ref: "#/components/schemas/UserMini"
+        venture:
+          type: ["string", "null"]
+        progressPercent:
+          type: ["number", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    Notification:
+      type: object
+      required: [id, title, message, type, read, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [opportunity, milestone, verification, connection, system]
+        read:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    NotificationMarkRead:
+      type: object
+      required: [ids]
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+
+    DashboardStats:
+      type: object
+      required: [totalUsers, activeVentures, opportunitiesPosted, industriesActive, marketplaceListings, verifiedFieldAgents]
+      properties:
+        totalUsers:
+          type: integer
+        activeVentures:
+          type: integer
+        opportunitiesPosted:
+          type: integer
+        industriesActive:
+          type: integer
+        marketplaceListings:
+          type: integer
+        verifiedFieldAgents:
+          type: integer
+        myActiveVentures:
+          type: integer
+        myProgressUpdates:
+          type: integer
+
+    OpenaiConversation:
+      type: object
+      required: [id, title, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    OpenaiMessage:
+      type: object
+      required: [id, conversationId, role, content, createdAt]
+      properties:
+        id:
+          type: integer
+        conversationId:
+          type: integer
+        role:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    OpenaiConversationInput:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+    OpenaiMessageInput:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+    OpenaiConversationWithMessages:
+      type: object
+      required: [id, title, createdAt, messages]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenaiMessage"
+    OpenaiError:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    Industry:
+      type: object
+      required: [id, name, slug, description, ventureCount]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        ventureCount:
+          type: integer
+        iconUrl:
+          type: ["string", "null"]
+
+    FollowStatus:
+      type: object
+      required: [following, followersCount, followingCount]
+      properties:
+        following:
+          type: boolean
+        followersCount:
+          type: integer
+        followingCount:
+          type: integer
+
+    UserPublic:
+      type: object
+      required: [id, name, role, verificationStatus, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        role:
+          type: string
+        industry:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        bio:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        verificationStatus:
+          type: string
+        followersCount:
+          type: integer
+        followingCount:
+          type: integer
+        isFollowing:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    RepostInput:
+      type: object
+      properties:
+        comment:
+          type: string
+
+    SaveStatus:
+      type: object
+      required: [saved]
+      properties:
+        saved:
+          type: boolean
+
+    UserMini:
+      type: object
+      required: [id, name, role, verificationStatus]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        role:
+          type: string
+        verificationStatus:
+          type: string
+        avatarUrl:
+          type: ["string", "null"]
+
+    VenturePublic:
+      type: object
+      required: [id, title, userId, status, currentDay, progressPercent, startedAt, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        userId:
+          type: integer
+        status:
+          type: string
+          enum: [active, paused, completed, abandoned]
+        currentDay:
+          type: integer
+        progressPercent:
+          type: number
+        template:
+          $ref: "#/components/schemas/VentureTemplate"
+        owner:
+          $ref: "#/components/schemas/UserMini"
+        startedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    VerificationRequest:
+      type: object
+      required: [id, requesterId, status, targetType, createdAt]
+      properties:
+        id:
+          type: integer
+        requesterId:
+          type: integer
+        agentId:
+          type: ["integer", "null"]
+        status:
+          type: string
+          enum: [pending, in_review, verified, rejected]
+        notes:
+          type: ["string", "null"]
+        evidenceUrls:
+          type: array
+          items:
+            type: string
+        targetType:
+          type: string
+        targetId:
+          type: ["integer", "null"]
+        rejectionReason:
+          type: ["string", "null"]
+        requester:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+
+    VerificationRequestInput:
+      type: object
+      required: [targetType]
+      properties:
+        notes:
+          type: string
+        targetType:
+          type: string
+        targetId:
+          type: integer
+
+    VerificationStatusUpdate:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [pending, in_review, verified, rejected]
+        notes:
+          type: string
+        evidenceUrls:
+          type: array
+          items:
+            type: string
+        rejectionReason:
+          type: string
+
+    IndustryTarget:
+      type: object
+      required: [id, industry, progressPercent, createdAt]
+      properties:
+        id:
+          type: integer
+        industry:
+          type: string
+        subIndustry:
+          type: ["string", "null"]
+        productCategory:
+          type: ["string", "null"]
+        specificProduct:
+          type: ["string", "null"]
+        currentRevenue:
+          type: ["number", "null"]
+        currentProductionVolume:
+          type: ["string", "null"]
+        currentMarketSize:
+          type: ["number", "null"]
+        targetRevenue:
+          type: ["number", "null"]
+        targetYear:
+          type: ["integer", "null"]
+        growthTargetPercent:
+          type: ["number", "null"]
+        progressPercent:
+          type: number
+        requiredContributions:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+
+    IndustryTargetInput:
+      type: object
+      required: [industry]
+      properties:
+        industry:
+          type: string
+        subIndustry:
+          type: string
+        productCategory:
+          type: string
+        specificProduct:
+          type: string
+        currentRevenue:
+          type: number
+        currentProductionVolume:
+          type: string
+        currentMarketSize:
+          type: number
+        targetRevenue:
+          type: number
+        targetYear:
+          type: integer
+        growthTargetPercent:
+          type: number
+        progressPercent:
+          type: number
+        requiredContributions:
+          type: object
+
+    UnreadCount:
+      type: object
+      required: [count]
+      properties:
+        count:
+          type: integer
+
+    Deal:
+      type: object
+      required: [id, title, dealType, status, initiatorId, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        dealType:
+          type: string
+        status:
+          type: string
+          enum: [draft, open, agreed, witness_pending, active, completed, cancelled]
+        initiatorId:
+          type: integer
+        industry:
+          type: ["string", "null"]
+        subIndustry:
+          type: ["string", "null"]
+        activityTag:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        description:
+          type: string
+        financialValue:
+          type: ["string", "null"]
+        nonFinancial:
+          type: ["string", "null"]
+        timeline:
+          type: ["string", "null"]
+        terms:
+          type: ["string", "null"]
+        risks:
+          type: ["string", "null"]
+        fieldAgentRequired:
+          type: boolean
+        copilotSummary:
+          type: ["string", "null"]
+        milestones:
+          type: array
+          items:
+            type: object
+        parties:
+          type: array
+          items:
+            $ref: "#/components/schemas/DealParty"
+        witnesses:
+          type: array
+          items:
+            $ref: "#/components/schemas/DealWitness"
+        initiator:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    DealParty:
+      type: object
+      required: [id, dealId, userId, role, agreed, createdAt]
+      properties:
+        id:
+          type: integer
+        dealId:
+          type: integer
+        userId:
+          type: integer
+        role:
+          type: string
+        agreed:
+          type: boolean
+        agreedAt:
+          type: ["string", "null"]
+          format: date-time
+        user:
+          $ref: "#/components/schemas/UserMini"
+        createdAt:
+          type: string
+          format: date-time
+
+    DealWitness:
+      type: object
+      required: [id, dealId, name, confirmed, createdAt]
+      properties:
+        id:
+          type: integer
+        dealId:
+          type: integer
+        name:
+          type: string
+        witnessRole:
+          type: ["string", "null"]
+        email:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+        relationship:
+          type: ["string", "null"]
+        confirmed:
+          type: boolean
+        confirmedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    DealInput:
+      type: object
+      required: [title, dealType]
+      properties:
+        title:
+          type: string
+        dealType:
+          type: string
+        industry:
+          type: string
+        subIndustry:
+          type: string
+        activityTag:
+          type: string
+        country:
+          type: string
+        stateCity:
+          type: string
+        description:
+          type: string
+        financialValue:
+          type: string
+        nonFinancial:
+          type: string
+        timeline:
+          type: string
+        terms:
+          type: string
+        risks:
+          type: string
+        fieldAgentRequired:
+          type: boolean
+        milestones:
+          type: array
+          items:
+            type: object
+        originatingType:
+          type: string
+        originatingId:
+          type: integer
+
+    DealWitnessInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        witnessRole:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        relationship:
+          type: string
+
+    AddPartyInput:
+      type: object
+      required: [userId]
+      properties:
+        userId:
+          type: integer
+        role:
+          type: string
+
+    Innovation:
+      type: object
+      required: [id, title, description, innovationType, authorId, status, loves, comments, solutionsCount, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        innovationType:
+          type: string
+          enum: [idea, challenge, research, problem, solution_request]
+        author:
+          $ref: "#/components/schemas/UserMini"
+        authorId:
+          type: integer
+        industry:
+          type: ["string", "null"]
+        subIndustry:
+          type: ["string", "null"]
+        activityTag:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        stateCity:
+          type: ["string", "null"]
+        expectedOutcome:
+          type: ["string", "null"]
+        reward:
+          type: ["string", "null"]
+        deadline:
+          type: ["string", "null"]
+        requiredSkills:
+          type: array
+          items:
+            type: string
+          nullable: true
+        requiredCollaborators:
+          type: array
+          items:
+            type: string
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+          nullable: true
+        mediaUrls:
+          type: array
+          items:
+            type: string
+          nullable: true
+        status:
+          type: string
+        loves:
+          type: integer
+        comments:
+          type: integer
+        solutionsCount:
+          type: integer
+        isFollowing:
+          type: boolean
+        hasLoved:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    InnovationInput:
+      type: object
+      required: [title, description]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        innovationType:
+          type: string
+        industry:
+          type: string
+        subIndustry:
+          type: string
+        activityTag:
+          type: string
+        country:
+          type: string
+        stateCity:
+          type: string
+        expectedOutcome:
+          type: string
+        reward:
+          type: string
+        deadline:
+          type: string
+        requiredSkills:
+          type: array
+          items:
+            type: string
+        requiredCollaborators:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        mediaUrls:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+
+    InnovationSolution:
+      type: object
+      required: [id, innovationId, authorId, title, content, status, createdAt]
+      properties:
+        id:
+          type: integer
+        innovationId:
+          type: integer
+        authorId:
+          type: integer
+        author:
+          $ref: "#/components/schemas/UserMini"
+        title:
+          type: string
+        content:
+          type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    InnovationSolutionInput:
+      type: object
+      required: [title, content]
+      properties:
+        title:
+          type: string
+        content:
+          type: string

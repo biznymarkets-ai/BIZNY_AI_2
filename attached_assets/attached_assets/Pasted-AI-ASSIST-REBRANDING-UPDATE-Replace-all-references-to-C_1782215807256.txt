@@ -1,0 +1,217 @@
+AI-ASSIST REBRANDING UPDATE
+
+Replace all references to "Co-Pilot" throughout the platform.
+
+New name:
+
+AI-Assist
+
+This applies to:
+
+Bottom Navigation
+
+Page Titles
+
+Sidebar Navigation
+
+Buttons
+
+Menus
+
+Tooltips
+
+Notifications
+
+Prompts
+
+Onboarding
+
+Empty States
+
+AI System Messages
+
+Execution Guidance
+
+Template Guidance
+
+Deal Desk Guidance
+
+Profile References
+
+Search Results
+
+Documentation
+
+Anywhere "Co-Pilot" currently appears.
+
+NEW BRAND POSITIONING
+
+AI-Assist is not a chatbot.
+
+AI-Assist is not customer support.
+
+AI-Assist is not a generic AI assistant.
+
+AI-Assist is Bizny's execution coach, coordination engine, opportunity navigator, and productivity assistant.
+
+AI-Assist helps users:
+
+Discover industries
+
+Find opportunities
+
+Find templates
+
+Use templates
+
+Execute milestones
+
+Find suppliers
+
+Find buyers
+
+Find collaborators
+
+Find field agents
+
+Track progress
+
+Complete projects
+
+Build businesses
+
+Coordinate deals
+
+Navigate industry targets
+
+Recommend next actions
+
+BOTTOM NAVIGATION UPDATE
+
+Replace the current Co-Pilot icon.
+
+Use the uploaded AI-Assist icon supplied by the user.
+
+The uploaded icon should become the official AI-Assist icon throughout the platform.
+
+Bottom Navigation should be:
+
+Home
+
+Explore
+
+AI-Assist
+
+Library
+
+Market
+
+AI-Assist remains in the center position.
+
+This is intentional because AI-Assist is a core engine of Bizny.
+
+ICON USAGE
+
+Use the uploaded AI-Assist icon for:
+
+Bottom Navigation
+
+AI-Assist Page
+
+AI Notifications
+
+AI Recommendations
+
+AI Guidance Panels
+
+AI Empty States
+
+AI Widgets
+
+AI Suggestion Cards
+
+AI Coaching Components
+
+AI BRAND LANGUAGE
+
+Replace phrases such as:
+
+Ask Co-Pilot
+
+Co-Pilot Recommendation
+
+Co-Pilot Suggestion
+
+Co-Pilot Guidance
+
+with:
+
+Ask AI-Assist
+
+AI-Assist Recommendation
+
+AI-Assist Suggestion
+
+AI-Assist Guidance
+
+AI-Assist Coaching
+
+AI-Assist Next Step
+
+AI-Assist Opportunity Alert
+
+AI-Assist INDUSTRY ROLE
+
+AI-Assist should behave as:
+
+Execution Coach
+
+Industry Navigator
+
+Opportunity Scanner
+
+Template Advisor
+
+Deal Coordinator
+
+Progress Monitor
+
+Business Growth Assistant
+
+It should actively help users move from:
+
+Idea
+
+to Template
+
+to Execution
+
+to Results
+
+to Business
+
+to Deal
+
+to Growth
+
+UI IMPROVEMENT
+
+Ensure the new AI-Assist icon renders cleanly in:
+
+Light Mode
+
+Dark Mode
+
+Small navigation sizes
+
+Mobile devices
+
+Tablet devices
+
+Profile panels
+
+Notification panels
+
+Use consistent spacing and alignment.
+
+The icon should feel native to the platform and become one of the primary Bizny brand symbols.

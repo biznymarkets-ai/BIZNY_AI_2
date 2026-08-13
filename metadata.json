@@ -1,0 +1,8 @@
+{
+  "name": "Bizny",
+  "description": "Productivity and venture coordination platform designed to help people discover opportunities, connect with collaborators, verify information, and build ventures.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

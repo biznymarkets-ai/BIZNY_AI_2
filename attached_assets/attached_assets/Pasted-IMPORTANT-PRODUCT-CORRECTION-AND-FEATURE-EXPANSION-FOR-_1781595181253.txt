@@ -1,0 +1,347 @@
+IMPORTANT PRODUCT CORRECTION AND FEATURE EXPANSION FOR BIZNY
+
+Please update the platform based on the following priorities.
+
+1. USER-CREATED TEMPLATES
+
+Users must be able to create and upload their own venture templates.
+
+This is very important.
+
+Bizny is not only a platform where the admin creates templates. Users, founders, professionals, farmers, artisans, researchers, and industrial enthusiasts must be able to create replicable templates that others can learn from, follow, save, clone, or adapt.
+
+Template creation form should include:
+
+Template title
+Industry
+Sub-industry
+Product category
+Description
+Problem solved
+Required skills
+Required tools/equipment
+Required resources
+Estimated duration
+Estimated startup cost
+Milestones
+Daily progress structure
+Risks
+Expected outcomes
+Media attachments
+Files/documents
+Visibility: public/private/draft
+
+Example:
+
+Six-week poultry farm template
+Duration: 42 days
+Each day should allow progress posting.
+Users following the template should be prompted to post daily updates.
+
+2. TEMPLATE PROGRESS SYSTEM
+
+Every template should support milestone-based execution.
+
+If a template lasts 42 days, 60 days, 90 days, or any chosen duration, the system should automatically generate a progress timeline.
+
+Example:
+
+Day 1
+Day 2
+Day 3
+Day 4
+...
+Day 42
+
+Each day allows the user to post:
+
+Text update
+Photo
+Video
+Voice note
+File/document
+Milestone evidence
+Progress percentage
+
+The goal is to make venture execution visible and trackable.
+
+3. ONE UNIFIED FEED
+
+Do not create two separate feeds that users must manually switch between.
+
+Use one unified feed.
+
+Behind the scenes, posts can have different post types, but to the user, everything should flow naturally in one feed, just like modern social platforms.
+
+The feed should include:
+
+General posts
+Opportunity posts
+Marketplace posts
+Template posts
+Venture progress posts
+Milestone posts
+Industry updates
+Co-Pilot suggested posts
+
+Post types should be visually distinct, but not separated into different feeds.
+
+Users should be able to filter the feed if they want, but the default should be one unified feed.
+
+4. FLOATING POST BUTTON
+
+Add a floating post/create button on all major app pages.
+
+Position:
+
+Bottom-right on desktop
+Bottom-right or bottom-center on mobile
+
+This should feel like the X/Twitter post button.
+
+When clicked, user should choose:
+
+Create general post
+Post opportunity
+Add marketplace listing
+Create template
+Post venture progress
+Upload milestone update
+Ask Co-Pilot
+
+5. POST CREATION
+
+Users must be able to create posts immediately.
+
+Post creation should support:
+
+Text
+Images
+Video
+Files/documents
+Voice/audio if feasible
+Links
+Industry tags
+Location
+Post type
+
+Each post should show:
+
+Author
+Role
+Business/profile
+Industry
+Timestamp
+Verification badge
+Media/file preview
+Reaction buttons
+Comment button
+Share button
+Save button
+Interested button
+
+6. REGISTRATION MUST WORK TODAY
+
+Users should be able to register immediately and get a Bizny ID.
+
+Required registration fields:
+
+Full name
+Email
+Phone number
+WhatsApp number
+Country
+State/city
+Role
+Industry interests
+Skills/interests
+
+WhatsApp number and phone number are very important.
+
+After registration, user should enter the dashboard immediately.
+
+7. PUBLIC BUSINESS PROFILE
+
+Each user should have a public Bizny profile.
+
+If the user is a business, the profile should include:
+
+Business name
+Business registration number
+Country
+State/city
+Business address optional
+Industries
+Sub-industries
+Primary products
+Services
+Description
+Phone number
+WhatsApp
+Email
+Website/social links
+Verification status
+Marketplace listings
+Templates created
+Ventures in progress
+Posts
+Milestones
+Followers/following
+
+Profile should be shareable via public URL.
+
+8. INDUSTRY AND SUB-INDUSTRY SYSTEM
+
+Do not treat industries too generically.
+
+Bizny should support broad industries and also very specific product-based industries.
+
+Example:
+
+Agriculture is broad.
+
+But Bizny should also recognize:
+
+Pepper industry
+Tomato industry
+Onion industry
+Cassava industry
+Palm oil industry
+Cocoa industry
+Cotton industry
+Soybean industry
+Rice industry
+Poultry industry
+Fish farming industry
+
+Each product can represent an economic category because products carry specific economic value.
+
+The industry system should allow:
+
+Main industry
+Sub-industry
+Product category
+Specific product
+Value chain stage
+
+Example:
+
+Main industry: Agriculture
+Sub-industry: Pepper
+Product: Scotch bonnet pepper
+Value chain stage: Farming / Processing / Packaging / Distribution / Export
+
+This makes Bizny more realistic and economically useful.
+
+9. INDUSTRIAL ENTHUSIASTS
+
+Industrial Enthusiast must be included as a major user role.
+
+Description:
+
+Someone who is curious about industries, opportunities, business models, production systems, and venture creation, even if they are not yet working in that industry.
+
+Industrial enthusiasts should be able to:
+
+Follow industries
+Explore templates
+Save opportunities
+Ask Co-Pilot questions
+Study venture progress
+Join communities
+Discover where they can contribute
+
+Important message:
+
+Your current profession does not define the limits of your contribution.
+
+10. MARKETPLACE
+
+Marketplace remains simple.
+
+No checkout.
+No cart.
+No payments.
+
+It should work like a discovery directory.
+
+Each listing should include:
+
+Product/service
+Seller/manufacturer
+Location
+Description
+Images
+Price range optional
+Minimum order optional
+Phone
+WhatsApp
+Email
+Verification status
+
+Actions:
+
+Call
+WhatsApp
+Email
+Save
+Share
+Request verification
+
+11. UPDATES AND MILESTONES
+
+Updates should clearly show milestone progress.
+
+Users should be able to post updates tied to:
+
+A template
+A venture
+A milestone
+A specific day
+A product
+An industry
+
+Example:
+
+Poultry Venture
+Day 12 of 42
+Milestone: Brooder setup complete
+Progress: 28%
+Evidence: photo/video/file
+
+12. CO-PILOT
+
+The Co-Pilot should guide users through:
+
+Creating templates
+Choosing industries
+Discovering sub-industries
+Understanding product value chains
+Planning ventures
+Finding opportunities
+Improving posts
+Understanding milestones
+Exploring new industries
+
+Co-Pilot should act as an industrial mentor, not just a chatbot.
+
+CORE PRODUCT PRINCIPLE
+
+Bizny is a platform for making productivity visible.
+
+People should be able to:
+
+Discover opportunities
+Create templates
+Follow templates
+Build ventures
+Post progress
+Verify activity
+Find collaborators
+List products
+Explore industries
+Move beyond their current profession
+
+Every feature should support this mission:
+
+Reliable. Productive. Connected.

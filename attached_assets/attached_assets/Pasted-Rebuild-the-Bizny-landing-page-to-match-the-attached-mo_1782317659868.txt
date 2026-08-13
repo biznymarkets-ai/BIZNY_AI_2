@@ -1,0 +1,226 @@
+Rebuild the Bizny landing page to match the attached mockup closely.
+
+Use the existing Bizny app, but replace the homepage/landing page with this new structure and visual direction.
+
+Brand:
+Bizny — Open Productivity Ecosystem for Africa.
+
+Main hero headline:
+Build Real Ventures Across Africa.
+
+Mission line:
+Build the Continent. One Machine. One Solution. One Enterprise at a Time.
+
+Hero subtext:
+Discover opportunities, follow proven templates, find trusted collaborators, verify actors, and coordinate productive ventures across industries and locations.
+
+Primary CTA:
+Get Early Access
+
+Secondary CTA:
+Explore Bizny
+
+Design requirements:
+
+* Premium SaaS/productivity platform look.
+* Mobile-first responsive design.
+* Desktop and mobile versions must both look polished.
+* Use deep teal, dark green, off-white, white, charcoal, and soft gold accents.
+* Use clean cards, rounded corners, subtle shadows, compact typography, and modern icons.
+* Include light and dark mode compatibility if already supported.
+* Make it feel like a real platform, not a brochure.
+
+Landing page sections in order:
+
+1. Header Navigation
+   Logo: Bizny
+   Links:
+   Home, Repository, Marketplace, Opportunities, Ventures, Directory, Deal Desk, About Us
+   Buttons:
+   Log in
+   Get Early Access
+
+2. Hero Section
+   Left side:
+   Small badge: Open Productivity Ecosystem for Africa
+   Headline: Build Real Ventures Across Africa.
+   Subtext as written above.
+   Buttons: Get Early Access, Explore Bizny
+   Mission banner below headline.
+
+Right side:
+Large dashboard preview showing:
+
+* Search bar
+* User greeting
+* My Ventures
+* Opportunities
+* Requests
+* Verifications
+* Recent Ventures
+* Opportunity Alerts
+
+Use sample data:
+Cassava Processing Plant — In Progress — 66%
+Solar Drying Business — Planning — 40%
+Agro Input Distribution — Active — 70%
+Rice Offtake Partnership
+Packaging Supply
+Trucking Services
+
+3. Stats Bar
+   50+ Countries
+   1M+ Economic Nodes
+   100+ Industries
+   ∞ Opportunities
+
+4. Trust Is Infrastructure
+   Title:
+   Trust Is Infrastructure
+
+Text:
+Our field agents verify businesses, locations, opportunities and actors so you can make better decisions with confidence.
+
+Cards:
+
+* Request Verification
+* Field Verification
+* Evidence Collected
+* Trusted Decisions
+
+Include a field agent visual/card or illustration.
+
+5. What Is Bizny?
+   Text:
+   Bizny is an open industrial coordination platform that helps people discover opportunities, follow proven templates, verify actors, request support, track progress, and build productive relationships across Africa.
+
+Include three cards:
+
+* All Connected: People, data, templates and opportunities work together.
+* Built for Africa: Designed for our reality. Built for our future.
+* Open & Secure: Open by design. Secure by purpose.
+
+6. Core Features
+   Create feature cards:
+
+* Template Repository
+* Marketplace
+* Opportunities
+* Ventures
+* Directory
+* Deal Desk
+* Verification
+* Co-Pilot
+
+7. Location Intelligence
+   Title:
+   Location Intelligence
+
+Text:
+See where deals, ventures and opportunities are emerging across Africa.
+
+Include filters:
+Country: Nigeria
+State: Lagos State
+View: All Industries
+
+Include a map-style card and insight panel:
+Active Ventures: 2,450+
+Opportunities: 1,350+
+Verified Businesses: 780+
+Field Agents: 120+
+
+8. Who Is Bizny For?
+   Title:
+   Who Is Bizny For?
+
+Subtitle:
+Built for every actor in the productivity ecosystem.
+
+Role cards:
+
+* Producers
+* Manufacturers
+* Traders
+* Logistics
+* Professionals
+* Field Agents
+* Students
+* Enthusiasts
+* Diaspora
+* Investors
+
+9. Our Philosophy
+   Title:
+   Our Philosophy
+
+Text:
+Every person is an economic node. Every skill, business, farm, machine, location and template can become part of a larger productive system when properly connected.
+
+Bullets:
+
+* We believe in equal access to industry.
+* We believe in shared global responsibility.
+* We believe in open collaboration and transparency.
+* We believe in Africa’s infinite potential.
+
+10. Join The Movement
+    Title:
+    Join The Movement
+
+Subtitle:
+Be part of the network building Africa’s productive future.
+
+Create early access form fields:
+Full Name
+Email Address
+WhatsApp Number
+Country
+Role
+Industry Interest
+Skill Area
+Business Stage
+
+Button:
+Join Bizny Early Access
+
+This form should connect to the existing registration flow if available. If registration already exists, “Get Early Access” and “Join Bizny Early Access” should route to Register.
+
+11. Footer
+    Include:
+    Bizny
+    Open Productivity Ecosystem
+    One brick, one machine, one venture at a time.
+
+Footer columns:
+Platform:
+Repository, Marketplace, Opportunities, Ventures, Directory, Deal Desk
+
+Company:
+About Us, Careers, Press, Blog, Contact Us
+
+Resources:
+Help Center, Guides, Community, API
+
+Legal:
+Terms of Service, Privacy Policy, Data Policy
+
+Contact:
+[hello@biznyafrica.com](mailto:hello@biznyafrica.com)
++234 803 123 4567
+Lagos, Nigeria
+
+Mobile requirements:
+
+* Mobile homepage should match the mockup.
+* Show compact hero, CTA buttons, mission banner, stats, trust section, what is Bizny, core features, location intelligence, who it is for, philosophy, and join section.
+* Bottom mobile nav:
+  Home, Repository, Marketplace, Profile
+* Use hamburger menu on mobile.
+
+Important:
+Do not delete existing app functionality.
+Only replace/improve the landing page and connect the CTAs to the correct routes.
+Use reusable components.
+Keep code clean.
+Make sure the page works on desktop, tablet, and mobile.

@@ -1,0 +1,131 @@
+Send this to Replit:
+
+Update Bizny’s industry selection system.
+
+Do not use only broad sectors like Agriculture, Manufacturing, Technology, Energy, or Logistics as the main user identity.
+
+Those should be filters only.
+
+The main selectable identity should be the specific industry stamp.
+
+Examples:
+
+Cassava Starch Production
+Palm Oil Processing
+Palm Kernel Oil Processing
+Coconut Oil Extraction
+Soybean Processing
+Tom Brown Production
+Plantain Farming
+Plantain Flour Production
+Maggot Farming
+Black Soldier Fly Production
+Duckweed Cultivation
+Azolla Production
+Water Hyacinth Processing
+Aloe Vera Cultivation
+Aloe Vera Gel Extraction
+Moringa Processing
+Okra Seed Production
+Pepper Drying
+Fish Smoking
+Poultry Farming
+Fish Feed Production
+Paper Recycling
+Plastic Recycling
+Plastic-to-Fuel Conversion
+Textile Recycling
+Rubber Recycling
+Copper Recycling
+Aluminium Recycling
+Iron Recycling
+Battery Recycling
+Lithium Processing
+Steel Scrap Recovery
+Fertilizer Production
+Compost Manufacturing
+NPK Fertilizer Blending
+Biogas Production
+Solar Installation
+Solar Panel Assembly
+Wind Turbine Construction
+Water Turbine Construction
+Micro Hydro Development
+Dehydrator Manufacturing
+Agricultural Equipment Fabrication
+Metal Fabrication
+PVC Pipe Manufacturing
+Cement Block Production
+Interlocking Brick Production
+Asphalt Production
+Bitumen Processing
+Packaging Manufacturing
+Cold Room Construction
+Warehouse Operations
+Cold Chain Logistics
+Commodity Aggregation
+Export Documentation
+Business Verification
+Field Inspection
+Quality Assurance
+
+Use a three-level structure:
+
+Level 1: Sector
+
+Examples:
+Agriculture
+Manufacturing
+Energy
+Mining
+Logistics
+Services
+Health
+Construction
+Petrochemicals
+Electronics
+
+Level 2: Sub-sector
+
+Examples:
+Food Processing
+Recycling
+Fertilizer
+Solar
+Hydro
+Metals
+Packaging
+Agro-processing
+Industrial Equipment
+
+Level 3: Specific Industry Stamp
+
+Examples:
+Cassava Starch Production
+Plastic-to-Fuel Conversion
+Water Turbine Construction
+Maggot Farming
+Aloe Vera Gel Extraction
+
+The Level 3 Specific Industry Stamp should appear on:
+
+User profiles
+Business profiles
+Templates
+Executions
+Posts
+Marketplace listings
+Requests
+Opportunities
+Deals
+Industry Targets
+Search results
+AI-Assist recommendations
+
+Allow users to add custom industry stamps if the specific activity is missing.
+
+When a user adds a custom industry stamp, save it as pending review, but allow it to appear on their profile and posts immediately.
+
+AI-Assist should use these specific industry stamps to recommend templates, collaborators, suppliers, buyers, market days, opportunities, and industry targets.
+
+Do not replace the existing system completely. Extend it so the app can support very granular industries.

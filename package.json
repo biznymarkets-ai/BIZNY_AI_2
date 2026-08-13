@@ -1,0 +1,26 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "artifacts/artifacts/*",
+    "lib/lib/*",
+    "scripts/scripts"
+  ],
+  "scripts": {
+    "dev": "npm run build --workspace=@workspace/bizny && npm run dev --workspace=@workspace/api-server",
+    "build": "npm run build --workspace=@workspace/bizny && npm run build --workspace=@workspace/api-server",
+    "start": "npm run start --workspace=@workspace/api-server",
+    "lint": "tsc --build",
+    "typecheck": "tsc --build"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "typescript": "~5.9.3"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.4",
+    "@google/genai": "^2.16.0",
+    "firebase": "^12.17.1"
+  }
+}

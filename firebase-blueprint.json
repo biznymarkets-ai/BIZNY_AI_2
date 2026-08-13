@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "entities": {
+    "users": {
+      "title": "User Account",
+      "description": "Registered Bizny platform users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "country": { "type": "string" },
+        "stateCity": { "type": "string" },
+        "industry": { "type": "string" },
+        "role": { "type": "string" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "interests": { "type": "array", "items": { "type": "string" } },
+        "businessName": { "type": "string" },
+        "businessRegistrationNumber": { "type": "string" },
+        "website": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "name", "country", "industry", "role"]
+    },
+    "researchSubmissions": {
+      "title": "Research Submission",
+      "description": "Founding research survey submissions",
+      "type": "object",
+      "properties": {
+        "submissionId": { "type": "string" },
+        "respondentName": { "type": "string" },
+        "respondentEmail": { "type": "string" },
+        "respondentPhone": { "type": "string" },
+        "country": { "type": "string" },
+        "role": { "type": "string" },
+        "stage": { "type": "string" },
+        "goals": { "type": "string" },
+        "resources": { "type": "string" },
+        "obstacles": { "type": "string" },
+        "biggestObstacle": { "type": "string" },
+        "knowledgeGap": { "type": "string" },
+        "aiComfort": { "type": "number" },
+        "aiTrustedTasks": { "type": "string" },
+        "topFeatures": { "type": "string" },
+        "usageFrequency": { "type": "string" },
+        "pricingInterest": { "type": "string" },
+        "pricingRange": { "type": "string" },
+        "communityInterest": { "type": "string" },
+        "fullData": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["submissionId"]
+    }
+  }
+}

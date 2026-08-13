@@ -1,0 +1,26 @@
+import { pgTable, serial, text, timestamp, integer } from "drizzle-orm/pg-core";
+
+export const researchSubmissionsTable = pgTable("research_submissions", {
+  id: serial("id").primaryKey(),
+  submissionId: text("submission_id").notNull().unique(),
+  country: text("country"),
+  role: text("role"),
+  stage: text("stage"),
+  goals: text("goals"),
+  resources: text("resources"),
+  obstacles: text("obstacles"),
+  biggestObstacle: text("biggest_obstacle"),
+  knowledgeGap: text("knowledge_gap"),
+  aiComfort: integer("ai_comfort"),
+  aiTrustedTasks: text("ai_trusted_tasks"),
+  topFeatures: text("top_features"),
+  usageFrequency: text("usage_frequency"),
+  pricingInterest: text("pricing_interest"),
+  pricingRange: text("pricing_range"),
+  communityInterest: text("community_interest"),
+  respondentName: text("respondent_name"),
+  respondentEmail: text("respondent_email"),
+  respondentPhone: text("respondent_phone"),
+  fullData: text("full_data"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});

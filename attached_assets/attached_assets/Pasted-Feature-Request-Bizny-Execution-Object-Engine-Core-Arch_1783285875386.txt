@@ -1,0 +1,389 @@
+Feature Request: Bizny Execution Object Engine (Core Architecture)
+
+Objective
+
+Bizny should not treat templates as static documents. Every template must be an executable Object that users can adopt and execute over time.
+
+When a user clicks Adopt, the platform creates a unique Execution Instance for that user.
+
+This execution engine must be generic enough to work across every industry (agriculture, manufacturing, technology, logistics, construction, services, education, healthcare, creative industries, renewable energy, etc.) without requiring custom backend logic for each template.
+
+The Object represents an executable workflow rather than a document.
+
+---
+
+Core Concepts
+
+The platform should separate the following components:
+
+1. Object
+
+The reusable master workflow.
+
+Created by a contributor.
+
+Can be updated and versioned.
+
+Defines:
+
+- Timeline
+- Phases
+- Milestones
+- Tasks
+- Completion rules
+- Evidence requirements
+- AI coaching prompts
+
+The Object never stores an individual user's progress.
+
+---
+
+2. Knowledge Base
+
+Supporting information only.
+
+Knowledge should not interfere with execution.
+
+Examples include:
+
+- Articles
+- Videos
+- Research papers
+- Biology
+- Technical references
+- FAQs
+- Best practices
+- Case studies
+- AI reference material
+
+The AI Coach should use this information whenever users request help.
+
+---
+
+3. Execution Instance
+
+Created whenever a user adopts an Object.
+
+This is the user's personal copy of the workflow.
+
+It stores:
+
+- Start date
+- Current execution day
+- Progress
+- Completed milestones
+- Submitted evidence
+- Notes
+- Metrics
+
+An Execution Instance never modifies the original Object.
+
+---
+
+4. Evidence
+
+Evidence is submitted whenever a milestone or task is completed.
+
+Evidence may include:
+
+- Photos
+- Videos
+- Documents
+- Notes
+- Measurements
+- GPS location (optional)
+
+Evidence is proof that work has been completed.
+
+---
+
+5. Milestone Posts
+
+Milestone Posts are a core part of the architecture.
+
+They are not ordinary social posts.
+
+Whenever a milestone is completed and evidence is submitted, Bizny should automatically generate a Milestone Post.
+
+The user should not need to create a second post manually.
+
+One action should serve both purposes:
+
+- Verify progress.
+- Share progress with the Bizny community.
+
+Each Milestone Post should automatically include:
+
+- Object name
+- Execution Day (e.g. Day 12 of 30)
+- Current phase
+- Completed milestone
+- Uploaded photos
+- Uploaded videos
+- User notes
+- Timestamp
+- Progress percentage
+- Location (optional)
+- Current execution status
+
+Milestone Posts should appear in:
+
+- User profile
+- Followers' feeds (subject to privacy settings)
+- Object activity feed
+- Object community page
+- Creator analytics
+- Community timeline
+
+Milestone Posts are generated automatically from milestone completion and must not be confused with manually created General Posts.
+
+---
+
+6. Metrics
+
+Metrics are generated automatically during execution.
+
+Examples include:
+
+- Current execution day
+- Completion percentage
+- Number of completed milestones
+- Number of photos uploaded
+- Number of videos uploaded
+- Time spent
+- Quantity produced
+- Revenue
+- Costs
+- Challenges reported
+- Execution streak
+
+Metrics should power dashboards and analytics.
+
+---
+
+Object Structure
+
+Each Object should support:
+
+- Metadata
+- Timeline
+- Phases
+- Milestones
+- Tasks
+- Required evidence
+- Optional evidence
+- AI coaching prompts
+- Completion rules
+
+The Object itself should remain reusable.
+
+---
+
+Timeline Engine
+
+Objects should support timeline-based execution.
+
+Example:
+
+Day 1
+
+↓
+
+Tasks
+
+↓
+
+Evidence Submission
+
+↓
+
+Milestone Completion
+
+↓
+
+Automatic Milestone Post
+
+↓
+
+Progress Updated
+
+↓
+
+Unlock Day 2
+
+Timeline duration should be configurable.
+
+Examples:
+
+- 7 days
+- 14 days
+- 30 days
+- 45 days
+- 60 days
+- 90 days
+- 365 days
+
+The engine should support future execution modes such as:
+
+- Strict Timeline
+- Flexible Timeline
+- Adaptive AI Timeline
+
+---
+
+Daily Coaching Engine
+
+Each day, the Execution Engine should generate today's work.
+
+Example:
+
+Today is Day 14.
+
+Today's tasks:
+
+- Feed larvae.
+- Record temperature.
+- Upload evidence.
+- Complete inspection.
+
+The system should notify users and guide them through daily execution.
+
+---
+
+Evidence System
+
+Every task can define acceptable evidence.
+
+Example:
+
+Required:
+
+- Photo
+
+Optional:
+
+- Video
+- Notes
+- Measurements
+- GPS
+
+Evidence should immediately attach to the completed milestone.
+
+---
+
+Automatic Milestone Post Generation
+
+Whenever a milestone is completed:
+
+Task Completed
+
+↓
+
+Evidence Submitted
+
+↓
+
+Milestone Verified (or Pending Verification)
+
+↓
+
+Automatic Milestone Post Created
+
+↓
+
+Execution Timeline Updated
+
+↓
+
+Execution Metrics Updated
+
+↓
+
+Community Activity Updated
+
+The Milestone Post is generated automatically.
+
+Users should never have to duplicate work by creating a separate post.
+
+---
+
+Execution Journal
+
+The platform should automatically maintain an execution journal for every Execution Instance.
+
+Example:
+
+Day 17
+
+Harvest completed.
+
+12.5 kg harvested.
+
+Three photos uploaded.
+
+One video uploaded.
+
+Milestone completed.
+
+Progress: 58%.
+
+This journal serves as the user's execution history.
+
+---
+
+Generic Design
+
+The Execution Object Engine must remain completely generic.
+
+It should work without backend modifications for:
+
+- Farming
+- Manufacturing
+- Construction
+- Photography
+- Software development
+- Renewable energy
+- Education
+- Logistics
+- Healthcare
+- Research
+- Creative industries
+- Any future industry
+
+Only the Object definition should change.
+
+The execution engine should remain the same.
+
+---
+
+Future Features
+
+Design the architecture so it can later support:
+
+- AI coaching
+- AI diagnostics
+- Object forking
+- Version history
+- Community improvements
+- Validation
+- Team execution
+- Multi-user collaboration
+- Progress analytics
+- Industry dashboards
+- Government and institutional reporting
+- Reputation systems
+- Certification
+- Achievement badges
+- Marketplace integration
+
+The architecture should remain modular and extensible.
+
+---
+
+Initial Development Priority
+
+Do not build industry-specific workflows first.
+
+Instead, build the generic Execution Object Engine.
+
+Once the engine is complete, individual Objects (such as Black Soldier Fly Larvae Farming, Poultry Farming, Fish Farming, Photography Business, Manufacturing Processes, etc.) can be created using the same engine without requiring additional backend development.

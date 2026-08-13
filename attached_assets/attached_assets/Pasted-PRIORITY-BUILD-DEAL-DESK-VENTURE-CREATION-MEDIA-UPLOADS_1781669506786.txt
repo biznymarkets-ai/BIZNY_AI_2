@@ -1,0 +1,567 @@
+PRIORITY BUILD — DEAL DESK, VENTURE CREATION, MEDIA UPLOADS, INDUSTRIAL TAGS, DARK MODE
+
+Do not modify landing page in this task.
+
+Focus on the internal app.
+
+1. MEDIA UPLOADS FOR POSTS
+
+Users must be able to add media and files to posts.
+
+Post composer should support:
+
+Text
+Images
+Video
+Audio recording
+Voice note upload
+Document upload
+PDF upload
+Spreadsheet upload
+Links
+
+If direct audio recording is difficult, create the UI first and support uploaded audio files.
+
+Each post should show media previews properly.
+
+2. POST INDUSTRIAL STAMPS AND LOCATION STAMPS
+
+Every post must carry:
+
+Industry stamp
+Specific industry tag
+Product/activity tag
+Location stamp
+
+Do not use only generic industries like Agriculture, Manufacturing, or Technology.
+
+Allow very specific industry tagging.
+
+Examples:
+
+Okra seed production
+Pepper drying
+Paper recycling
+Cloth material recycling
+10KW micro-hydro turbine
+Cassava starch processing
+Palm oil packaging
+Plastic bottle recycling
+Solar cold storage
+Catfish fingerling production
+
+Post industry fields:
+
+Main industry
+Sub-industry
+Specific activity/product
+Value chain stage
+Country
+State/city
+Local area optional
+
+Example:
+
+Main industry: Energy
+Sub-industry: Micro-hydro power
+Specific activity/product: 10KW water turbine electricity generation
+Value chain stage: Prototype / Fabrication / Installation / Maintenance
+Location: Cross River, Nigeria
+
+Every post card should visibly show:
+
+Industry stamp
+Location stamp
+Verification status if available
+
+3. USER PROFILE IMPROVEMENT
+
+Improve user profile and business profile.
+
+User profile fields:
+
+Full name
+Bizny ID / public slug
+Role
+Country
+State/city
+Phone number
+WhatsApp number
+Email
+Skills
+Industry interests
+Specific industries
+Posts
+Templates created
+Ventures created
+Deals participated in
+Marketplace listings
+Verification status
+
+Business profile fields:
+
+Business name
+Business registration number
+Country
+State/city
+Phone
+WhatsApp
+Email
+Industries
+Specific product/activity
+Primary products/services
+Marketplace listings
+Templates
+Ventures
+Deals
+Verification status
+
+4. DARK MODE
+
+Implement proper dark mode.
+
+Dark mode should be polished, not overly green or heavy.
+
+Use:
+
+Dark background
+Readable white/off-white text
+Teal accents
+Soft borders
+Clear cards
+Good contrast
+Accessible font sizes
+
+Add a theme toggle in Settings and menu:
+
+Light
+Dark
+System default
+
+5. VENTURE CREATION SYSTEM
+
+Users must be able to create ventures directly or from templates.
+
+A venture is a real project someone is building and documenting.
+
+Venture creation form fields:
+
+Venture title
+Description
+Problem being solved
+Main industry
+Sub-industry
+Specific product/activity
+Value chain stage
+Country
+State/city
+Local area optional
+Venture type
+Estimated duration
+Start date
+Target completion date
+Required collaborators
+Required resources
+Required equipment
+Funding required optional
+Expected output
+Milestones
+Daily progress structure
+Visibility: public/private
+Attachments
+
+Example venture:
+
+Title:
+10KW Micro-Hydro Water Turbine Electricity Generation
+
+Description:
+A replicable venture to design, fabricate, install, and test a 10KW water turbine system for local electricity generation.
+
+Main industry:
+Energy
+
+Sub-industry:
+Micro-hydro power
+
+Specific activity:
+10KW water turbine generation
+
+Value chain stage:
+Design / Fabrication / Installation / Maintenance
+
+Milestones:
+
+1. Site assessment
+2. Water flow measurement
+3. Turbine design
+4. Material sourcing
+5. Fabrication
+6. Installation
+7. Electrical connection
+8. Testing
+9. Safety review
+10. Public replication guide
+
+Daily updates:
+
+Users should be able to post daily photos, videos, voice notes, documents, and milestone evidence.
+
+Every venture should have:
+
+Venture dashboard
+Timeline
+Milestones
+Progress percentage
+Team members
+Media updates
+Documents
+Verification status
+Field agent involvement
+Public share link
+
+6. VENTURE DIRECTORY
+
+Create or improve the Venture Directory.
+
+Venture Directory shows ventures being built across Africa.
+
+Filters:
+
+Industry
+Specific activity/product
+Country
+State/city
+Stage
+Funding need
+Verification status
+Progress percentage
+
+Venture cards should show:
+
+Venture title
+Industry stamp
+Location
+Owner
+Stage
+Progress %
+Current milestone
+Required collaborators
+Verification status
+Follow button
+View venture button
+
+7. DEAL DESK
+
+Create a Deal Desk module.
+
+Purpose:
+
+Help users structure collaboration, investment, funding, supply, manufacturing, partnership, and project deals safely.
+
+Bizny is not acting as a bank, escrow provider, lawyer, or guarantor.
+
+Bizny provides a coordination interface, workflow, documentation, milestone tracking, AI summarization, and verification prompts.
+
+Deal Desk entry points:
+
+From a Request Post
+From an Opportunity Post
+From a Marketplace Listing
+From a Venture Page
+From a Project Page
+From a Profile
+From direct user invitation
+
+Deal types:
+
+Collaboration deal
+Funding deal
+Supply deal
+Manufacturing deal
+Distribution deal
+Professional service deal
+Diaspora partnership deal
+Equipment lease deal
+Investment interest deal
+Project execution deal
+
+Deal creation fields:
+
+Deal title
+Deal type
+Originating post/project/venture/listing optional
+Initiating user
+Receiving user
+Parties involved
+Country
+State/city
+Deal location
+Industry
+Specific product/activity
+Deal description
+Expected contribution from each party
+Financial value optional
+Non-financial contribution optional
+Timeline
+Milestones
+Required documents
+Required verification
+Field agent required yes/no
+Witnesses
+Terms
+Risks
+Disclaimers
+Status
+
+Deal statuses:
+
+Draft
+Awaiting counterparty review
+Awaiting verification
+Awaiting witness confirmation
+Agreement pending
+Active
+Milestone in progress
+Completed
+Cancelled
+Disputed
+
+8. DEAL AGREEMENT FLOW
+
+A deal should not become active immediately.
+
+Flow:
+
+1. User expresses interest or responds to request/opportunity.
+2. Deal draft is created.
+3. Both parties review terms.
+4. Co-Pilot summarizes the deal.
+5. Parties edit or accept terms.
+6. Witnesses or third parties are added if required.
+7. Field agent verification is requested if physical location, asset, business, project, or milestone is involved.
+8. Both parties click Agree.
+9. Deal becomes Active.
+10. Milestones are tracked.
+11. Updates and evidence are uploaded.
+12. Deal is completed, cancelled, or disputed.
+
+Agreement button:
+
+Each party must click:
+
+I have reviewed and agree to these terms.
+
+Show timestamp and user identity.
+
+9. AI CO-PILOT IN DEAL DESK
+
+Co-Pilot should help summarize deals.
+
+Co-Pilot outputs:
+
+Plain-language deal summary
+Parties involved
+What each party is contributing
+Timeline
+Milestones
+Required verification
+Potential risks
+Missing information
+Suggested next steps
+
+The AI summary must be editable and must clearly say:
+
+This summary is for coordination support only and is not legal advice.
+
+10. WITNESSES AND THIRD PARTIES
+
+Deal Desk should allow witnesses.
+
+Witness fields:
+
+Name
+Role
+Email
+Phone/WhatsApp
+Relationship to deal
+Verification status
+Signature/confirmation status
+
+Witnesses can confirm:
+
+I have reviewed this deal summary.
+I understand my role as a witness.
+I confirm that I am not responsible for performance unless explicitly stated.
+
+11. FIELD AGENT REQUIREMENT
+
+For deals involving physical assets, physical locations, local business operations, marketplace supply, manufacturing, farms, equipment, or construction, field agent verification should be strongly recommended.
+
+Some deals should show:
+
+Field agent verification recommended before proceeding.
+
+For high-risk deals, show:
+
+This deal should not proceed until a field agent or trusted verification actor has reviewed the location, business, asset, or milestone.
+
+Field agent verification should include:
+
+Location check
+Business existence check
+Photo/video evidence
+Document review
+Local reputation note
+Verification status
+Date/time
+Field agent identity
+
+12. DEAL LOCATION INTELLIGENCE
+
+Add a Deal Locations subpage inside Deal Desk.
+
+Purpose:
+
+Show location reputation and deal activity.
+
+Location page should show:
+
+Country
+State/city
+Deal activity level
+Number of deals
+Completed deals
+Disputed deals
+Verified businesses
+Available field agents
+Risk note
+Opportunity note
+
+Examples:
+
+Abu Dhabi:
+High deal activity, strong business infrastructure, many diaspora/investor opportunities.
+
+Borno State:
+Higher caution area depending on region and deal type. Require stronger verification and field agent review.
+
+Important:
+Do not permanently label places as “bad” or “no-deal” in a defamatory way. Use neutral risk language.
+
+Labels:
+
+High activity
+Emerging activity
+Verification recommended
+High caution
+Limited data
+
+13. AFRICAN COUNTRY SUPPORT
+
+Add country selector for all African countries.
+
+Use a static list or API.
+
+Countries should include all 54 African countries.
+
+Use country selection in:
+
+User profile
+Business profile
+Posts
+Ventures
+Marketplace
+Directory
+Deal Desk
+Industry Targets
+
+14. DEAL DESK DISCLAIMER
+
+Add disclaimer to Deal Desk and agreement flow.
+
+Disclaimer text:
+
+Bizny provides a coordination interface to help users structure, document, verify, and track deals. Bizny is not a bank, escrow provider, legal representative, guarantor, investment advisor, or law enforcement body.
+
+Users are responsible for performing their own due diligence, verifying identities, reviewing documents, confirming business registration, inspecting locations, and seeking independent legal, financial, or professional advice before entering any agreement.
+
+Bizny encourages milestone-based execution, field agent verification, witness confirmation, and careful review before proceeding with any deal.
+
+By using Deal Desk, users acknowledge that Bizny is not liable for losses, fraud, failed performance, misrepresentation, breach of agreement, or disputes between parties.
+
+15. GENERIC DEAL AGREEMENT TEMPLATE
+
+Create a reusable generic agreement template inside Deal Desk.
+
+Sections:
+
+Deal title
+Date
+Parties
+Contact details
+Deal type
+Purpose
+Background
+Industry
+Location
+Specific product/activity
+Contributions of Party A
+Contributions of Party B
+Financial terms if any
+Non-financial terms if any
+Timeline
+Milestones
+Deliverables
+Verification requirements
+Field agent requirement
+Documents required
+Witnesses
+Communication method
+Risks
+Dispute handling
+Cancellation terms
+Bizny disclaimer
+Agreement confirmation
+Digital signatures/acceptance
+
+This should be editable by users before agreement.
+
+16. DEAL DESK UI
+
+Deal Desk pages:
+
+Deal Desk Home
+Create Deal
+My Deals
+Deal Requests
+Active Deals
+Completed Deals
+Disputed Deals
+Deal Locations
+Deal Detail Page
+Deal Agreement Page
+
+Deal Desk cards should show:
+
+Deal title
+Deal type
+Parties
+Industry stamp
+Location stamp
+Status
+Next step
+Verification status
+Milestone progress
+Open Deal button
+
+17. FINAL PRIORITY
+
+Build the skeleton and workflows first.
+
+Do not build payments.
+Do not build escrow.
+Do not build wallet.
+Do not process money.
+
+Deal Desk is for coordination, documentation, verification, agreement, milestone tracking, and AI summarization only.

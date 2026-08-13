@@ -1,0 +1,24 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "noEmit": true,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "types": ["node", "vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@workspace/api-client-react": ["../../../lib/lib/api-client-react/src/index.ts"],
+      "@workspace/api-zod": ["../../../lib/lib/api-zod/src/index.ts"],
+      "@workspace/db": ["../../../lib/lib/db/src/index.ts"],
+      "@workspace/integrations-openai-ai-react": ["../../../lib/lib/integrations-openai-ai-react/src/index.ts"]
+    }
+  }
+}

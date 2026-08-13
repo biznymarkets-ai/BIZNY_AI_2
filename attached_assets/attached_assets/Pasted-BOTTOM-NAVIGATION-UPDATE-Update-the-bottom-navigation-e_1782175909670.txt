@@ -1,0 +1,165 @@
+BOTTOM NAVIGATION UPDATE
+
+Update the bottom navigation exactly as follows:
+
+Home
+
+Explore
+
+Co-Pilot
+
+Library
+
+Market
+
+Do not remove Co-Pilot from the bottom navigation.
+
+Co-Pilot must remain in the center position because it is a core Bizny engine, not a secondary tool.
+
+The Co-Pilot is the user's execution coach, business guide, recommendation engine, and productivity assistant.
+
+Replace the current Co-Pilot hand icon with a clearer AI icon.
+
+Preferred icons:
+
+Brain icon
+
+Brain circuit icon
+
+AI assistant icon
+
+Intelligence icon
+
+Execution coach icon
+
+The icon should immediately communicate intelligence, guidance, and assistance.
+
+Replace Innovation in the bottom navigation with Library.
+
+Library should use a book icon.
+
+Library represents the knowledge hub of Bizny and contains:
+
+Templates
+
+Blueprints
+
+Playbooks
+
+SOPs
+
+Research
+
+Experiments
+
+Guides
+
+Reusable systems
+
+Market should use a storefront icon instead of a shopping cart icon.
+
+The cart icon suggests e-commerce checkout.
+
+The storefront icon better represents:
+
+Marketplace
+
+Deal Desk
+
+Stores
+
+Commercial activity
+
+Supplier discovery
+
+Business opportunities
+
+Final Bottom Navigation Structure:
+
+Home = House icon
+
+Explore = Compass icon
+
+Co-Pilot = Brain / AI icon
+
+Library = Book icon
+
+Market = Storefront icon
+
+Innovation should remain accessible through:
+
+Hamburger Menu
+
+Explore Page
+
+Library Page
+
+Do not delete Innovation.
+
+Remove it only from the bottom navigation.
+
+Innovation is an activity that happens throughout the platform and does not need to occupy one of the five primary navigation slots.
+
+The top navigation bar should remain:
+
+Hamburger Menu
+
+Bizny Logo
+
+Current Page Title
+
+Search Icon
+
+Notification Icon
+
+Profile Avatar
+
+All other destinations should remain accessible through the hamburger menu, including:
+
+Innovation
+
+Industry Targets
+
+Initiatives
+
+Directory
+
+Opportunities
+
+Deal Desk
+
+Executions
+
+Profile
+
+Settings
+
+Dark Mode
+
+UI POLISH REQUIREMENTS
+
+Review all navigation components for consistency.
+
+Improve:
+
+Spacing
+
+Padding
+
+Typography hierarchy
+
+Card shadows
+
+Button hierarchy
+
+Empty states
+
+Icon consistency
+
+Touch target sizes
+
+Visual balance
+
+The application should feel like a modern mobile-first productivity platform rather than an admin dashboard.
+
+Focus only on this navigation update and UI polish pass.
