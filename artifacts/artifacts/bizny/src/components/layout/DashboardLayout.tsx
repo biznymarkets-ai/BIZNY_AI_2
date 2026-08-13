@@ -329,12 +329,18 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const canPublish = composerContent.trim().length > 0 || mediaUrls.length > 0 || linkUrl.trim().length > 0;
+
   const handlePublish = () => {
-    if (!composerContent.trim()) return;
+    const finalContent = composerContent.trim() || (mediaUrls.length > 0 ? "Shared attachment" : linkUrl.trim() ? "Shared link" : "");
+    if (!finalContent) {
+      toast({ description: "Please type something or attach media to post." });
+      return;
+    }
     createPostMutation.mutate(
       {
         data: {
-          content: composerContent.trim(),
+          content: finalContent,
           postType: selectedType,
           ...(composerLocation.trim() ? { locationName: composerLocation.trim() } : {}),
           ...(stateCity.trim() ? { stateCity: stateCity.trim() } : {}),
@@ -363,9 +369,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           setLocationBarOpen(false);
           setStampOpen(false);
           queryClient.invalidateQueries({ queryKey: getListFeedQueryKey() });
-          toast({ description: "Post published." });
+          toast({ description: "Post published successfully!" });
         },
-        onError: () => toast({ variant: "destructive", description: "Failed to publish." }),
+        onError: () => toast({ variant: "destructive", description: "Failed to publish post. Please try again." }),
       }
     );
   };
@@ -692,7 +698,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <Button
               size="sm"
               onClick={handlePublish}
-              disabled={!composerContent.trim() || createPostMutation.isPending}
+              disabled={!canPublish || createPostMutation.isPending}
               className="rounded-full px-5 h-8 text-sm font-semibold"
             >
               {createPostMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Publish"}

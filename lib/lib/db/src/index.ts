@@ -21,19 +21,32 @@ if (process.env.DATABASE_URL) {
   pool.on("error", (err) => console.warn("[AI Studio] Postgres pool background error:", err.message));
   db = drizzlePg(pool, { schema });
 } else {
-  try {
-    if (!fs.existsSync(dbDir)) {
-      fs.mkdirSync(dbDir, { recursive: true });
-    }
-  } catch {
-    dbDir = path.join("/tmp", "pgdata");
-    if (!fs.existsSync(dbDir)) {
-      fs.mkdirSync(dbDir, { recursive: true });
+  let pglite: PGlite | null = null;
+  const candidates = [
+    dbDir,
+    path.join("/tmp", "pgdata"),
+    "memory://",
+  ];
+
+  for (const targetPath of candidates) {
+    try {
+      if (targetPath.startsWith("/")) {
+        if (!fs.existsSync(targetPath)) {
+          fs.mkdirSync(targetPath, { recursive: true });
+        }
+      }
+      pglite = new PGlite(targetPath === "memory://" ? undefined : targetPath);
+      console.log(`[AI Studio] PGlite initialized successfully at: ${targetPath}`);
+      break;
+    } catch (e: any) {
+      console.warn(`[AI Studio] Failed to init PGlite at ${targetPath}:`, e?.message);
     }
   }
-  const pglite = new PGlite(dbDir);
-  db = drizzlePglite(pglite, { schema });
-  initPgliteTables(pglite).catch(err => console.error("Error initializing PGlite tables:", err));
+
+  if (pglite) {
+    db = drizzlePglite(pglite, { schema });
+    initPgliteTables(pglite).catch(err => console.error("Error initializing PGlite tables:", err));
+  }
 }
 
 async function initPgliteTables(pglite: PGlite) {

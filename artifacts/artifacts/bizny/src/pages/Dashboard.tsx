@@ -886,7 +886,14 @@ function ComposeBox({ onClose, onPosted }: { onClose: () => void; onPosted: () =
   ];
 
   const handlePost = async () => {
-    if (!content.trim() || !token) return;
+    if (!content.trim()) {
+      toast({ description: "Please enter your update text before posting." });
+      return;
+    }
+    if (!token) {
+      toast({ variant: "destructive", description: "You must be signed in to post." });
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await fetch("/api/feed", {
@@ -894,10 +901,14 @@ function ComposeBox({ onClose, onPosted }: { onClose: () => void; onPosted: () =
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ content: content.trim(), postType, mainIndustry: industry || undefined }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to publish post.");
+      }
+      toast({ description: "Post published to network feed!" });
       onPosted();
-    } catch {
-      toast({ variant: "destructive", description: "Failed to post." });
+    } catch (err: any) {
+      toast({ variant: "destructive", description: err?.message || "Failed to post." });
     } finally {
       setSubmitting(false);
     }

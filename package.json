@@ -2,6 +2,7 @@
   "name": "workspace",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "workspaces": [
     "artifacts/artifacts/*",
     "lib/lib/*",
@@ -9,8 +10,8 @@
   ],
   "scripts": {
     "dev": "npm run build --workspace=@workspace/bizny && npm run dev --workspace=@workspace/api-server",
-    "build": "npm run build --workspace=@workspace/bizny && npm run build --workspace=@workspace/api-server",
-    "start": "npm run start --workspace=@workspace/api-server",
+    "build": "npm run build --workspace=@workspace/bizny && npm run build --workspace=@workspace/api-server && mkdir -p dist && cp -r artifacts/artifacts/bizny/dist/public dist/public && cp -r artifacts/artifacts/api-server/dist/* dist/",
+    "start": "node server.ts",
     "lint": "tsc --build",
     "typecheck": "tsc --build"
   },

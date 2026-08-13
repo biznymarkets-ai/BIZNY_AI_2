@@ -5,11 +5,14 @@ import {
   Calendar, Globe, Wrench, CheckCircle2, Clock,
   Plus, Upload, MessageSquare, Bookmark, Share2,
   BarChart2, FileText, ArrowLeft, Lightbulb,
-  Flag, AlertTriangle, DollarSign, Rocket,
+  Flag, AlertTriangle, DollarSign, Rocket, Loader2, X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const STAGE_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
   idea: { color: "text-blue-600", bg: "bg-blue-50 border-blue-100", label: "Idea" },
@@ -82,10 +85,36 @@ type Tab = "overview" | "milestones" | "team" | "updates" | "documents";
 export default function ProjectDetail() {
   const params = useParams<{ id: string }>();
   const [, navigate] = useLocation();
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [updates, setUpdates] = useState(MOCK_PROJECT.updates);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateText, setUpdateText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const project = MOCK_PROJECT;
   const stage = STAGE_CONFIG[project.stage];
+
+  const handlePostUpdate = () => {
+    if (!updateText.trim()) return;
+    setSubmitting(true);
+    setTimeout(() => {
+      const newUpdate = {
+        id: Date.now(),
+        author: user?.name || "Chidi Nwankwo",
+        initials: user?.name ? user.name.split(" ").map(n => n[0]).join("") : "CN",
+        content: updateText.trim(),
+        date: "Just now",
+        likes: 0,
+      };
+      setUpdates([newUpdate, ...updates]);
+      setUpdateText("");
+      setShowUpdateModal(false);
+      setSubmitting(false);
+      toast({ description: "Project update published successfully!" });
+    }, 300);
+  };
 
   const TABS: { id: Tab; label: string }[] = [
     { id: "overview", label: "Overview" },
@@ -305,31 +334,63 @@ export default function ProjectDetail() {
 
         {activeTab === "updates" && (
           <div className="space-y-3">
-            <button className="w-full py-2.5 border border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-primary/30 hover:text-primary transition-all flex items-center justify-center gap-2">
+            <button
+              onClick={() => setShowUpdateModal(true)}
+              className="w-full py-2.5 border border-dashed border-primary/30 bg-primary/5 rounded-xl text-sm text-primary font-medium hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
+            >
               <Plus className="h-4 w-4" /> Post Project Update
             </button>
-            {project.updates.map((u) => (
-              <div key={u.id} className="bg-white rounded-xl border border-gray-100 p-4">
+            {updates.map((u) => (
+              <div key={u.id} className="bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">{u.initials}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">{u.author}</p>
-                    <p className="text-xs text-gray-400">{u.date}</p>
+                    <p className="text-sm font-semibold text-foreground">{u.author}</p>
+                    <p className="text-xs text-muted-foreground">{u.date}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed">{u.content}</p>
-                <div className="flex items-center gap-3 mt-3 pt-3 border-t border-gray-50">
-                  <button className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 transition-colors">
+                <p className="text-sm text-foreground/90 leading-relaxed">{u.content}</p>
+                <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border">
+                  <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-red-500 transition-colors">
                     ❤️ {u.likes}
                   </button>
-                  <button className="flex items-center gap-1 text-xs text-gray-400 hover:text-primary transition-colors">
+                  <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
                     <MessageSquare className="h-3.5 w-3.5" /> Reply
                   </button>
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {showUpdateModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" onClick={() => setShowUpdateModal(false)}>
+            <div className="bg-background w-full max-w-lg rounded-2xl border border-border p-5 space-y-4 shadow-xl" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <h3 className="font-semibold text-foreground text-base">Post Project Update</h3>
+                <button onClick={() => setShowUpdateModal(false)} className="text-muted-foreground hover:text-foreground">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <textarea
+                autoFocus
+                value={updateText}
+                onChange={e => setUpdateText(e.target.value)}
+                placeholder="Share milestone progress, operational updates, or news with collaborators..."
+                className="w-full h-32 p-3 text-sm text-foreground bg-muted/30 border border-border rounded-xl outline-none resize-none placeholder:text-muted-foreground"
+              />
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={() => setShowUpdateModal(false)}>
+                  Cancel
+                </Button>
+                <Button size="sm" disabled={!updateText.trim() || submitting} onClick={handlePostUpdate}>
+                  {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" /> : null}
+                  Publish Update
+                </Button>
+              </div>
+            </div>
           </div>
         )}
 

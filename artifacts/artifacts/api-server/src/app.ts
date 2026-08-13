@@ -32,14 +32,28 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Health checks for Cloud Run container probes
+app.get(["/healthz", "/health", "/api/healthz"], (_req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 app.use("/api/uploads", express.static(uploadsDir));
 app.use("/api", router);
 
 // Serve frontend static assets and handle SPA routing
+const baseDir = typeof import.meta !== "undefined" && import.meta.dirname
+  ? import.meta.dirname
+  : (typeof __dirname !== "undefined" ? __dirname : process.cwd());
+
 const possibleBiznyDirs = [
+  path.resolve(process.cwd(), "dist/public"),
   path.resolve(process.cwd(), "artifacts/artifacts/bizny/dist/public"),
   path.resolve(process.cwd(), "../bizny/dist/public"),
-  path.resolve(process.cwd(), "dist/public"),
+  path.resolve(baseDir, "dist/public"),
+  path.resolve(baseDir, "public"),
+  path.resolve(baseDir, "../bizny/dist/public"),
+  path.resolve(baseDir, "../../bizny/dist/public"),
+  path.resolve(baseDir, "../../../bizny/dist/public"),
 ];
 const biznyDist = possibleBiznyDirs.find((d) => fs.existsSync(d)) || possibleBiznyDirs[0];
 

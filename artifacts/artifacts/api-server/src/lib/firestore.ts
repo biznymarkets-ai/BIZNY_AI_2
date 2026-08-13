@@ -19,10 +19,18 @@ function loadFirebaseConfig() {
     if (process.env.FIREBASE_CONFIG_JSON) {
       return JSON.parse(process.env.FIREBASE_CONFIG_JSON);
     }
+    const baseDir = typeof import.meta !== "undefined" && import.meta.dirname
+      ? import.meta.dirname
+      : (typeof __dirname !== "undefined" ? __dirname : process.cwd());
     const possiblePaths = [
       path.resolve(process.cwd(), "firebase-applet-config.json"),
-      path.resolve(import.meta.dirname, "../../../../firebase-applet-config.json"),
-      path.resolve(import.meta.dirname, "../../../firebase-applet-config.json"),
+      path.resolve(process.cwd(), "../../firebase-applet-config.json"),
+      path.resolve(process.cwd(), "../../../firebase-applet-config.json"),
+      path.resolve(baseDir, "firebase-applet-config.json"),
+      path.resolve(baseDir, "../firebase-applet-config.json"),
+      path.resolve(baseDir, "../../firebase-applet-config.json"),
+      path.resolve(baseDir, "../../../firebase-applet-config.json"),
+      path.resolve(baseDir, "../../../../firebase-applet-config.json"),
     ];
     for (const configPath of possiblePaths) {
       if (fs.existsSync(configPath)) {

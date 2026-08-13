@@ -985,7 +985,7 @@ export const ListFeedResponse = zod.array(ListFeedResponseItem)
  */
 export const CreatePostBody = zod.object({
   "content": zod.string(),
-  "postType": zod.enum(['share', 'question', 'request', 'opportunity', 'template', 'venture_progress', 'milestone', 'marketplace_listing', 'industry_insight', 'verification_update']),
+  "postType": zod.enum(['share', 'question', 'request', 'opportunity', 'template', 'venture_progress', 'milestone', 'marketplace_listing', 'industry_insight', 'verification_update', 'innovation_idea', 'innovation_challenge']),
   "ventureId": zod.number().optional(),
   "templateId": zod.number().optional(),
   "mediaUrl": zod.string().optional(),
