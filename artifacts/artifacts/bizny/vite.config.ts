@@ -3,11 +3,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 const rawPort = process.env.PORT ?? "5173";
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
+const parsedPort = parseInt(rawPort, 10);
+const port = !isNaN(parsedPort) && parsedPort > 0 ? parsedPort : 5173;
 
 const basePath = process.env.BASE_PATH ?? "/";
 
