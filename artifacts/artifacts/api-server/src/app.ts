@@ -65,6 +65,8 @@ app.use((req, res, next) => {
   const indexPath = path.join(biznyDist, "index.html");
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
+  } else if (req.path === "/" || req.path === "") {
+    res.status(200).send("<!DOCTYPE html><html><head><title>Bizny</title></head><body><div id=\"root\"></div></body></html>");
   } else {
     next();
   }

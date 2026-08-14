@@ -313,7 +313,7 @@ export default function ResearchPortal() {
                 </p>
                 <div className="flex items-center gap-2 text-xs font-semibold text-gray-500">
                   <div className="w-2 h-2 rounded-full bg-[#033B4C]" />
-                  <span>Darryl Akpamba — Founder, Bizny</span>
+                  <span>Darrin Akpambang — Founder, Bizny</span>
                 </div>
               </div>
 
