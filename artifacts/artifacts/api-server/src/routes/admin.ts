@@ -16,7 +16,7 @@ import {
 
 const router = Router();
 
-const ADMIN_PASSKEY = process.env.ADMIN_PASSKEY || "bizny2026!admin";
+const ADMIN_PASSKEY = process.env.ADMIN_PASSKEY || "justina2026!";
 const ADMIN_EMAILS = new Set(["biznymarkets@gmail.com", "admin@bizny.com", "founder@bizny.com"]);
 
 // Admin Auth Middleware

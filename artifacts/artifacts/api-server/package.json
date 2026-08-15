@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
+    "@google/genai": "^2.16.0",
     "@workspace/api-zod": "*",
     "@workspace/db": "*",
     "@workspace/integrations-openai-ai-server": "*",
@@ -20,8 +21,10 @@
     "esbuild": "0.25.8",
     "esbuild-plugin-pino": "^2.3.3",
     "express": "^5.2.1",
+    "firebase": "^12.17.1",
     "multer": "^2.2.0",
     "openai": "^6.42.0",
+    "pg": "^8.20.0",
     "pino": "^9.14.0",
     "pino-http": "^10.5.0",
     "pino-pretty": "^13.1.3",

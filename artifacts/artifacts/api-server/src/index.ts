@@ -2,7 +2,8 @@ import app from "./app";
 import { logger } from "./lib/logger";
 
 const rawPort = process.env.PORT;
-const port = rawPort ? parseInt(rawPort, 10) : 3000;
+const parsed = rawPort ? parseInt(rawPort, 10) : NaN;
+const port = Number.isInteger(parsed) && parsed > 0 ? parsed : 3000;
 
 const server = app.listen(port, "0.0.0.0", () => {
   logger.info({ port }, `Server listening on 0.0.0.0:${port}`);
