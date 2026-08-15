@@ -46,10 +46,9 @@ function requireAdmin(req: Request, res: Response, next: NextFunction): void {
 router.post("/auth", (req: Request, res: Response) => {
   const { passkey, email } = req.body || {};
 
-  const isEmailAdmin = email && ADMIN_EMAILS.has(email.toLowerCase().trim());
-  const isPasskeyValid = passkey === ADMIN_PASSKEY || passkey === "bizny2026!admin" || passkey === "biznyadmin";
+  const isPasskeyValid = Boolean(passkey && passkey === ADMIN_PASSKEY);
 
-  if (isPasskeyValid || (isEmailAdmin && passkey === "bizny2026!admin")) {
+  if (isPasskeyValid) {
     return res.json({
       success: true,
       token: "bizny_admin_session_key",

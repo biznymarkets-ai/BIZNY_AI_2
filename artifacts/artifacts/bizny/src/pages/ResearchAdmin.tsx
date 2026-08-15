@@ -229,22 +229,12 @@ export default function ResearchAdmin() {
                   type="password"
                   value={passkeyInput}
                   onChange={(e) => setPasskeyInput(e.target.value)}
-                  placeholder="Enter passkey..."
+                  placeholder="Enter admin passkey..."
                   required
                   autoFocus
                   className="w-full px-4 py-2.5 rounded-xl border border-[#CBE5EE] dark:border-[#0F3B4A] bg-white dark:bg-[#041B23] text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-[#033B4C]"
                 />
                 <Key className="w-4 h-4 text-gray-400 absolute right-3.5 top-3" />
-              </div>
-              <div className="mt-2 text-[11px] text-gray-400 flex items-center justify-between">
-                <span>Default Passkey: <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-700 dark:text-gray-300">bizny2026!admin</code></span>
-                <button
-                  type="button"
-                  onClick={() => setPasskeyInput("bizny2026!admin")}
-                  className="text-[#033B4C] dark:text-[#79A7B7] hover:underline font-semibold"
-                >
-                  Auto-fill
-                </button>
               </div>
             </div>
 
