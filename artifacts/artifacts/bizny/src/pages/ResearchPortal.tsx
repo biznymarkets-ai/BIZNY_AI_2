@@ -249,6 +249,12 @@ export default function ResearchPortal() {
               Founding Research Portal
             </span>
             <Link
+              href="/admin"
+              className="text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-[#033B4C] flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-[#033B4C] dark:text-[#79A7B7]" /> Admin View
+            </Link>
+            <Link
               href="/"
               className="text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-[#033B4C] flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
@@ -346,11 +352,11 @@ export default function ResearchPortal() {
                 </div>
               </div>
 
-              {/* $3M Gemini AI Competition Note */}
+              {/* $2M Gemini AI Competition Note */}
               <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-xs sm:text-sm text-amber-900 dark:text-amber-200">
                 <Award className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="font-semibold">Participating in the $3 Million AI Competition:</strong> We are testing this thesis with Google Gemini AI technology to give African builders real execution tools. Your responses directly shape what we submit and build.
+                  <strong className="font-semibold">Participating in the $2 Million AI Competition:</strong> We are testing this thesis with Google Gemini AI technology to give African builders real execution tools. Your responses directly shape what we submit and build.
                 </div>
               </div>
 
@@ -1160,7 +1166,7 @@ export default function ResearchPortal() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="e.g. Darryl Akpamba"
+                  placeholder="e.g. Esther Akin"
                   className="w-full p-3.5 rounded-xl border border-[#CBE5EE] dark:border-[#0F3B4A] bg-[#F4F8FA] dark:bg-[#041B23] text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-[#033B4C]"
                 />
               </div>

@@ -55,7 +55,9 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/research" component={ResearchPortal} />
       <Route path="/founding-research" component={ResearchPortal} />
+      <Route path="/admin" component={ResearchAdmin} />
       <Route path="/admin/research" component={ResearchAdmin} />
+      <Route path="/research-admin" component={ResearchAdmin} />
       <Route path="/v2" component={HomeV2} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />

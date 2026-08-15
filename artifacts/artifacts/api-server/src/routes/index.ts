@@ -23,6 +23,7 @@ import coachRouter from "./coach";
 import dealTypesRouter from "./deal-types";
 import knowledgeArticlesRouter from "./knowledge-articles";
 import researchRouter from "./research";
+import adminRouter from "./admin";
 
 const router: IRouter = Router();
 
@@ -50,5 +51,6 @@ router.use(coachRouter);
 router.use(dealTypesRouter);
 router.use(knowledgeArticlesRouter);
 router.use("/research", researchRouter);
+router.use("/admin", adminRouter);
 
 export default router;

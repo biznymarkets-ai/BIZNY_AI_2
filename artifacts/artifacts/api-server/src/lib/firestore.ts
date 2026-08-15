@@ -119,12 +119,40 @@ export async function saveUserToFirestore(user: Record<string, any>): Promise<vo
 export async function getUserFromFirestoreByEmail(email: string): Promise<any | null> {
   if (!dbFirestore) return null;
   try {
-    const q = query(collection(dbFirestore, "users"), limit(1));
+    const q = query(collection(dbFirestore, "users"), limit(50));
     const snap = await getDocs(q);
     const docMatch = snap.docs.find((d) => d.data().email === email);
     return docMatch ? docMatch.data() : null;
   } catch (err) {
     console.error("[Firestore] Failed to fetch user by email:", err);
     return null;
+  }
+}
+
+// Get All Users from Firestore
+export async function getAllUsersFromFirestore(limitCount = 500): Promise<any[]> {
+  if (!dbFirestore) return [];
+  try {
+    const q = query(collection(dbFirestore, "users"), limit(limitCount));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => d.data());
+  } catch (err) {
+    console.error("[Firestore] Failed to fetch all users from Firestore:", err);
+    return [];
+  }
+}
+
+// Delete Research Submission from Firestore
+export async function deleteResearchFromFirestore(submissionId: string): Promise<boolean> {
+  if (!dbFirestore) return false;
+  try {
+    const { deleteDoc } = await import("firebase/firestore");
+    const subRef = doc(collection(dbFirestore, "researchSubmissions"), submissionId);
+    await deleteDoc(subRef);
+    console.log(`[Firestore] Deleted research submission: ${submissionId}`);
+    return true;
+  } catch (err) {
+    console.error("[Firestore] Failed to delete research submission:", err);
+    return false;
   }
 }
