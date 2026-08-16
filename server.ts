@@ -6,10 +6,10 @@ const distIndex = path.resolve(process.cwd(), "dist/index.mjs");
 const artifactIndex = path.resolve(process.cwd(), "artifacts/artifacts/api-server/dist/index.mjs");
 
 try {
-  if (fs.existsSync(distIndex)) {
-    await import(pathToFileURL(distIndex).href);
-  } else if (fs.existsSync(artifactIndex)) {
+  if (fs.existsSync(artifactIndex)) {
     await import(pathToFileURL(artifactIndex).href);
+  } else if (fs.existsSync(distIndex)) {
+    await import(pathToFileURL(distIndex).href);
   } else {
     console.error("[Server] Neither dist/index.mjs nor artifact index found!");
     process.exit(1);

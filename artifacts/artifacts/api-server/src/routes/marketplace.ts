@@ -16,13 +16,18 @@ async function enrichListing(listing: typeof listingsTable.$inferSelect) {
   const [poster] = await db.select().from(usersTable).where(eq(usersTable.id, listing.postedById));
   return {
     ...listing,
+    phone: listing.phone ?? undefined,
+    whatsapp: listing.whatsapp ?? undefined,
+    email: listing.email ?? undefined,
+    isVerified: listing.isVerified ?? false,
+    createdAt: listing.createdAt || new Date(),
     postedBy: poster ? {
       id: poster.id,
       name: poster.name,
       role: poster.role,
-      verificationStatus: poster.verificationStatus,
+      verificationStatus: poster.verificationStatus || "unverified",
       avatarUrl: poster.avatarUrl ?? null,
-    } : null,
+    } : undefined,
   };
 }
 

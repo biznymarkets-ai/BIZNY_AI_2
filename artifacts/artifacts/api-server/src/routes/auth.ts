@@ -89,7 +89,16 @@ router.post("/auth/register", async (req, res): Promise<void> => {
       businessName: businessName ?? null,
       businessRegistrationNumber: businessRegistrationNumber ?? null,
       website: website ?? null,
+      verificationStatus: "unverified",
+      createdAt: new Date(),
     };
+  }
+
+  if (user && !user.verificationStatus) {
+    user.verificationStatus = "unverified";
+  }
+  if (user && !user.createdAt) {
+    user.createdAt = new Date();
   }
 
   // Save user permanently to Firestore

@@ -102,7 +102,12 @@ router.post("/ventures", async (req, res): Promise<void> => {
     equipmentNeeded: equipmentNeeded ?? [],
   }).returning();
 
-  res.status(201).json(GetVentureResponse.parse({ ...venture, template }));
+  res.status(201).json(GetVentureResponse.parse({
+    ...venture,
+    template: template || undefined,
+    startedAt: venture.startedAt || new Date(),
+    createdAt: venture.createdAt || new Date(),
+  }));
 });
 
 router.get("/ventures/:id", async (req, res): Promise<void> => {

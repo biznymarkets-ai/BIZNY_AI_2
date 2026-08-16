@@ -26,11 +26,21 @@ import { cn } from "@/lib/utils";
 import IndustryStampSelector from "@/components/IndustryStampSelector";
 import { useAuth } from "@/contexts/AuthContext";
 
+interface ActionCardData {
+  type: string;
+  id?: number;
+  title?: string;
+  description?: string;
+  url?: string;
+}
+
 interface StreamMessage {
   role: "user" | "assistant";
   content: string;
   streaming?: boolean;
   isFallback?: boolean;
+  executingTool?: string;
+  actionCards?: ActionCardData[];
 }
 
 // ─── Markdown renderer ────────────────────────────────────────────────────────
@@ -1047,9 +1057,15 @@ export default function Copilot() {
     }
 
     try {
+      const authToken = localStorage.getItem("bizny_token");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`;
+      }
+
       const res = await fetch(`/api/openai/conversations/${convId}/messages`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ content: text }),
       });
 
@@ -1072,13 +1088,36 @@ export default function Copilot() {
             const data = JSON.parse(line.slice(6));
             if (data.done) {
               setStreamMessages((prev) =>
-                prev.map((m, i) => i === prev.length - 1 ? { ...m, streaming: false } : m)
+                prev.map((m, i) =>
+                  i === prev.length - 1
+                    ? {
+                        ...m,
+                        streaming: false,
+                        executingTool: undefined,
+                        actionCards: data.actionCards && data.actionCards.length > 0 ? data.actionCards : m.actionCards,
+                      }
+                    : m
+                )
               );
               queryClient.invalidateQueries({ queryKey: getGetOpenaiConversationQueryKey(convId) });
+            } else if (data.toolExecuting) {
+              const toolLabel =
+                data.toolExecuting.name === "search_marketplace" ? "Searching live Marketplace records..." :
+                data.toolExecuting.name === "search_templates" ? "Consulting Repository blueprints..." :
+                data.toolExecuting.name === "search_opportunities" ? "Checking open Opportunities..." :
+                data.toolExecuting.name === "create_coach_task" ? "Adding task to Coach execution board..." :
+                data.toolExecuting.name === "get_verification_status" ? "Checking Field Agent verification..." :
+                "Consulting Bizny database...";
+
+              setStreamMessages((prev) =>
+                prev.map((m, i) => (i === prev.length - 1 ? { ...m, executingTool: toolLabel } : m))
+              );
             } else if (data.content) {
               setStreamMessages((prev) =>
                 prev.map((m, i) =>
-                  i === prev.length - 1 ? { ...m, content: m.content + data.content } : m
+                  i === prev.length - 1
+                    ? { ...m, content: m.content + data.content, executingTool: undefined }
+                    : m
                 )
               );
             } else if (data.error) {
@@ -1269,7 +1308,12 @@ export default function Copilot() {
                         ? "bg-primary text-primary-foreground rounded-tr-sm px-4 py-3"
                         : "bg-muted/50 border border-border/60 rounded-tl-sm px-4 py-3.5"
                     )}>
-                      {msg.streaming && msg.content === "" ? (
+                      {msg.executingTool && msg.content === "" ? (
+                        <div className="flex items-center gap-2.5 py-1 text-xs text-primary font-medium">
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>{msg.executingTool}</span>
+                        </div>
+                      ) : msg.streaming && msg.content === "" ? (
                         <div className="flex items-center gap-2 py-0.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
                           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -1288,7 +1332,42 @@ export default function Copilot() {
                               <AlertTriangle className="h-2.5 w-2.5" /> Generated offline
                             </p>
                           )}
-                          {!msg.streaming && msg.content.length > 20 && i === displayMessages.length - 1 && (
+
+                          {/* Structured Action Cards from Backend Tools */}
+                          {msg.actionCards && msg.actionCards.length > 0 && !msg.streaming && (
+                            <div className="space-y-2 mt-3 pt-3 border-t border-border/50">
+                              {msg.actionCards.map((card, cardIdx) => (
+                                <a
+                                  key={cardIdx}
+                                  href={card.url || "#"}
+                                  className="flex items-start justify-between gap-3 p-3 bg-background/80 hover:bg-primary/5 border border-border/80 hover:border-primary/40 rounded-xl transition-all group"
+                                >
+                                  <div className="flex items-start gap-2.5">
+                                    <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                                      {card.type === "coach_task_created" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> :
+                                       card.type === "template_recommendation" ? <Briefcase className="w-4 h-4" /> :
+                                       card.type === "marketplace_results" ? <Store className="w-4 h-4" /> :
+                                       card.type === "opportunity_results" ? <Target className="w-4 h-4" /> :
+                                       <Sparkles className="w-4 h-4" />}
+                                    </div>
+                                    <div>
+                                      <p className="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
+                                        {card.title || "Platform Action"}
+                                      </p>
+                                      {card.description && (
+                                        <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">
+                                          {card.description}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary shrink-0 mt-1 transition-transform group-hover:translate-x-0.5" />
+                                </a>
+                              ))}
+                            </div>
+                          )}
+
+                          {!msg.streaming && (!msg.actionCards || msg.actionCards.length === 0) && msg.content.length > 20 && i === displayMessages.length - 1 && (
                             <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/40">
                               {getActionChips(msg.content).map((chip) => (
                                 <a key={chip.label} href={chip.href}

@@ -16,13 +16,17 @@ async function enrichOpportunity(opp: typeof opportunitiesTable.$inferSelect) {
   const [poster] = await db.select().from(usersTable).where(eq(usersTable.id, opp.postedById));
   return {
     ...opp,
+    role: opp.role ?? undefined,
+    investmentSize: opp.investmentSize ?? undefined,
+    deadline: opp.deadline ?? undefined,
+    createdAt: opp.createdAt || new Date(),
     postedBy: poster ? {
       id: poster.id,
       name: poster.name,
       role: poster.role,
-      verificationStatus: poster.verificationStatus,
+      verificationStatus: poster.verificationStatus || "unverified",
       avatarUrl: poster.avatarUrl ?? null,
-    } : null,
+    } : undefined,
   };
 }
 

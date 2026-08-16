@@ -1,6 +1,6 @@
 import { drizzle as drizzlePg } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import * as schema from "./schema";
+import * as schema from "./schema/index.ts";
 
 const { Pool } = pg;
 
@@ -242,10 +242,10 @@ function createInMemoryDb() {
   };
 }
 
-if (process.env.DATABASE_URL) {
+if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim() !== "") {
   try {
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: process.env.DATABASE_URL.trim(),
       connectionTimeoutMillis: 3000,
     });
     pool.on("error", (err) => console.warn("[Database] Postgres pool background error:", err.message));
@@ -260,6 +260,6 @@ if (process.env.DATABASE_URL) {
   db = createInMemoryDb();
 }
 
-export * from "./schema";
+export * from "./schema/index.ts";
 
 
