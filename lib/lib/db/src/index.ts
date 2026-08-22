@@ -25,44 +25,129 @@ function getColumnName(col: any): string {
   if (typeof col === "string") return col;
   if (typeof col === "object") {
     if (col[Symbol.for("drizzle:Name")]) return String(col[Symbol.for("drizzle:Name")]);
+    if (col[Symbol.for("drizzle:OriginalName")]) return String(col[Symbol.for("drizzle:OriginalName")]);
     if (col.name) return String(col.name);
     if (col._?.name) return String(col._.name);
+    if (col._?.columnName) return String(col._.columnName);
     if (col.key) return String(col.key);
     if (col.config?.name) return String(col.config.name);
+    if (col.columnName) return String(col.columnName);
+    if (col.fieldName) return String(col.fieldName);
+    if (col.queryChunks && Array.isArray(col.queryChunks)) {
+      for (const c of col.queryChunks) {
+        const sub = getColumnName(c);
+        if (sub) return sub;
+      }
+    }
   }
   return "";
+}
+
+function extractValueFromChunk(chunk: any): any {
+  if (chunk === undefined || chunk === null) return undefined;
+  if (typeof chunk === "string" || typeof chunk === "number" || typeof chunk === "boolean") return chunk;
+  if (chunk instanceof Date) return chunk;
+  if (chunk.value !== undefined) return chunk.value;
+  if (chunk.param !== undefined) return chunk.param;
+  if (chunk.val !== undefined) return chunk.val;
+  if (chunk.arg !== undefined) return chunk.arg;
+  if (chunk.encoder?.value !== undefined) return chunk.encoder.value;
+  if (chunk.encoder?.val !== undefined) return chunk.encoder.val;
+  if (chunk.queryChunks && Array.isArray(chunk.queryChunks)) {
+    for (const c of chunk.queryChunks) {
+      const v = extractValueFromChunk(c);
+      if (v !== undefined) return v;
+    }
+  }
+  if (typeof chunk === "object") {
+    for (const key of Object.keys(chunk)) {
+      if (typeof chunk[key] === "string" || typeof chunk[key] === "number" || typeof chunk[key] === "boolean") {
+        return chunk[key];
+      }
+    }
+  }
+  return undefined;
+}
+
+function matchesValue(actual: any, target: any, operator?: string): boolean {
+  if (actual === undefined && target === undefined) return true;
+  if (actual === null && target === null) return true;
+  if (actual === undefined || actual === null) return target === null || target === undefined;
+
+  const targetStr = String(target ?? "");
+  const actualStr = String(actual ?? "");
+
+  // Pattern matching for like/ilike with % wildcards
+  if (targetStr.includes("%")) {
+    const cleanPattern = targetStr
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      .replace(/\\%/g, ".*");
+    try {
+      const regex = new RegExp(`^${cleanPattern}$`, "i");
+      return regex.test(actualStr);
+    } catch {
+      const raw = targetStr.replace(/%/g, "").toLowerCase();
+      return actualStr.toLowerCase().includes(raw);
+    }
+  }
+
+  // Case-insensitive string matching
+  if (typeof actual === "string" && typeof target === "string") {
+    if (actual.toLowerCase() === target.toLowerCase()) return true;
+  }
+
+  // Numeric matching
+  if (!isNaN(Number(actual)) && !isNaN(Number(target)) && typeof actual !== "boolean" && typeof target !== "boolean") {
+    if (Number(actual) === Number(target)) return true;
+  }
+
+  // Loose equality
+  return actual == target;
 }
 
 function matchesWhere(item: any, condition: any): boolean {
   if (!condition) return true;
   try {
+    // 1. Binary expression (left and right)
     if (condition.left !== undefined && condition.right !== undefined) {
       const colName = getColumnName(condition.left);
-      const val = condition.right?.value !== undefined ? condition.right.value : condition.right;
-      if (colName && item[colName] !== undefined) {
-        return item[colName] == val;
-      }
-      for (const k of Object.keys(item)) {
-        if (k.toLowerCase() === colName.toLowerCase().replace(/_/g, "")) {
-          return item[k] == val;
+      const val = extractValueFromChunk(condition.right);
+      if (colName) {
+        if (item[colName] !== undefined) {
+          return matchesValue(item[colName], val);
+        }
+        for (const k of Object.keys(item)) {
+          if (k.toLowerCase() === colName.toLowerCase().replace(/_/g, "")) {
+            return matchesValue(item[k], val);
+          }
         }
       }
     }
+
+    // 2. QueryChunks from Drizzle SQL expressions
     if (condition.queryChunks && Array.isArray(condition.queryChunks)) {
       for (let i = 0; i < condition.queryChunks.length; i++) {
         const chunk = condition.queryChunks[i];
         const colName = getColumnName(chunk);
         if (colName) {
-          const nextValChunk = condition.queryChunks.find((c: any, idx: number) => idx > i && c?.value !== undefined);
-          if (nextValChunk) {
-            const val = nextValChunk.value;
-            if (item[colName] !== undefined) {
-              return item[colName] == val;
+          for (let j = i + 1; j < condition.queryChunks.length; j++) {
+            const val = extractValueFromChunk(condition.queryChunks[j]);
+            if (val !== undefined) {
+              if (item[colName] !== undefined) {
+                return matchesValue(item[colName], val);
+              }
+              for (const k of Object.keys(item)) {
+                if (k.toLowerCase() === colName.toLowerCase().replace(/_/g, "")) {
+                  return matchesValue(item[k], val);
+                }
+              }
             }
           }
         }
       }
     }
+
+    // 3. Composite AND / OR conditions
     if (Array.isArray(condition.conditions)) {
       if (condition.operator === "or") {
         return condition.conditions.some((c: any) => matchesWhere(item, c));

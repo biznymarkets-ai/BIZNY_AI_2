@@ -35,6 +35,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { INDUSTRY_SECTORS, SPECIFIC_ACTIVITIES, VALUE_CHAIN_STAGES } from "@/lib/countries";
+import { SyntheticUniverseBar } from "@/components/SyntheticUniverseBar";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Home",
@@ -882,7 +883,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       {/* PAGE CONTENT */}
       <main className="pt-14 pb-20 min-h-screen">
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <div className="max-w-2xl mx-auto px-4 pt-2 pb-4 space-y-3">
+          <SyntheticUniverseBar />
           {children}
         </div>
       </main>

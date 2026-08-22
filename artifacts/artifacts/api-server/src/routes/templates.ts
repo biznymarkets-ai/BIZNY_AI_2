@@ -27,8 +27,13 @@ const router: IRouter = Router();
 router.get("/templates", async (req, res): Promise<void> => {
   const { industry, creatorId, templateType, search } = req.query as Record<string, string | undefined>;
 
-  let rows = await db.select().from(ventureTemplatesTable)
-    .where(or(eq(ventureTemplatesTable.visibility, "public"), isNull(ventureTemplatesTable.creatorId)));
+  let rows = await db.select().from(ventureTemplatesTable);
+  if (rows.length === 0) {
+    // If empty, trigger synthetic seeding
+    const { seedSyntheticUniverse } = await import("../lib/synthetic-universe");
+    await seedSyntheticUniverse();
+    rows = await db.select().from(ventureTemplatesTable);
+  }
 
   if (industry) rows = rows.filter((r: any) => r.industry === industry);
   if (templateType) rows = rows.filter((r: any) => r.templateType === templateType);

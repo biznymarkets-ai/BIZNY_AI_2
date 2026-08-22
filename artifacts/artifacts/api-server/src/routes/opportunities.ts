@@ -12,10 +12,14 @@ import { getUserFromToken } from "./auth";
 
 const router: IRouter = Router();
 
+const VALID_OPP_TYPES = ['funding', 'job', 'project', 'partnership', 'training', 'industrial', 'export', 'research'];
+
 async function enrichOpportunity(opp: typeof opportunitiesTable.$inferSelect) {
   const [poster] = await db.select().from(usersTable).where(eq(usersTable.id, opp.postedById));
+  const safeType = VALID_OPP_TYPES.includes(opp.type) ? opp.type : 'industrial';
   return {
     ...opp,
+    type: safeType as any,
     role: opp.role ?? undefined,
     investmentSize: opp.investmentSize ?? undefined,
     deadline: opp.deadline ?? undefined,

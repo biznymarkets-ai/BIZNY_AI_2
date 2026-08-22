@@ -375,22 +375,66 @@ router.get("/coach/tasks", async (req, res): Promise<void> => {
   const userId = await getUserFromToken(req.headers.authorization);
   if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  const [plan] = await db
-    .select()
-    .from(coachPlansTable)
-    .where(eq(coachPlansTable.userId, userId))
-    .orderBy(desc(coachPlansTable.createdAt))
-    .limit(1);
+  const allPlans = await db.select().from(coachPlansTable);
+  const plan = allPlans.find((p) => Number(p.userId) === Number(userId));
 
-  if (!plan) { res.json([]); return; }
-
-  const tasks = await db
-    .select()
-    .from(coachTasksTable)
-    .where(eq(coachTasksTable.planId, plan.id))
-    .orderBy(coachTasksTable.dueDate);
+  const allTasks = await db.select().from(coachTasksTable);
+  const tasks = allTasks
+    .filter((t) => Number(t.userId) === Number(userId) || (plan && Number(t.planId) === Number(plan.id)))
+    .sort((a, b) => new Date(a.dueDate || a.createdAt || 0).getTime() - new Date(b.dueDate || b.createdAt || 0).getTime());
 
   res.json(tasks);
+});
+
+// POST /coach/tasks — create a task for the current user's active plan
+router.post("/coach/tasks", async (req, res): Promise<void> => {
+  const userId = await getUserFromToken(req.headers.authorization);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const { title, description, reason, priority = "medium", estimatedMinutes = 60, dueDate } = req.body || {};
+  if (!title) {
+    res.status(400).json({ error: "Title is required" });
+    return;
+  }
+
+  let planId: number;
+  const allPlans = await db.select().from(coachPlansTable);
+  const existingPlan = allPlans.find((p) => Number(p.userId) === Number(userId));
+
+  if (existingPlan) {
+    planId = existingPlan.id;
+  } else {
+    const [newPlan] = await db
+      .insert(coachPlansTable)
+      .values({
+        userId,
+        goal: "Execution Plan",
+        bottlenecks: [],
+        resources: [],
+        roles: [],
+      })
+      .returning();
+    planId = newPlan ? newPlan.id : 1;
+  }
+
+  const validPriority = ["high", "medium", "low"].includes(priority) ? priority : "medium";
+
+  const [task] = await db
+    .insert(coachTasksTable)
+    .values({
+      planId,
+      userId,
+      title,
+      description: description || "",
+      reason: reason || "Strategic execution task",
+      priority: validPriority as any,
+      estimatedMinutes: typeof estimatedMinutes === "number" ? estimatedMinutes : 60,
+      dueDate: dueDate ? new Date(dueDate) : null,
+      status: "not_started",
+    })
+    .returning();
+
+  res.status(201).json(task);
 });
 
 // PATCH /coach/tasks/:id — update task status

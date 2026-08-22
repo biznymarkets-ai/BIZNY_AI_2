@@ -73,8 +73,8 @@ export async function buildBiznyContext(userId: number | null): Promise<BiznyCop
   // 1. User profile lookup
   let userRecord: any = null;
   try {
-    const [u] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
-    userRecord = u || null;
+    const allUsers = await db.select().from(usersTable);
+    userRecord = allUsers.find((u) => Number(u.id) === Number(userId)) || null;
   } catch (err) {
     console.warn("[CopilotContext] User lookup warning:", err);
   }
@@ -97,12 +97,10 @@ export async function buildBiznyContext(userId: number | null): Promise<BiznyCop
   // 2. Venture lookup (most recent active venture)
   let ventureContext: any = null;
   try {
-    const userVentures = await db
-      .select()
-      .from(venturesTable)
-      .where(eq(venturesTable.userId, userId))
-      .orderBy(desc(venturesTable.createdAt))
-      .limit(1);
+    const allVentures = await db.select().from(venturesTable);
+    const userVentures = allVentures
+      .filter((v) => Number(v.userId) === Number(userId))
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
     if (userVentures.length > 0) {
       const v = userVentures[0];
@@ -132,20 +130,17 @@ export async function buildBiznyContext(userId: number | null): Promise<BiznyCop
   // 3. Coach plan & task state
   let coachContext: any = null;
   try {
-    const plans = await db
-      .select()
-      .from(coachPlansTable)
-      .where(eq(coachPlansTable.userId, userId))
-      .orderBy(desc(coachPlansTable.createdAt))
-      .limit(1);
+    const allPlans = await db.select().from(coachPlansTable);
+    const plans = allPlans
+      .filter((p) => Number(p.userId) === Number(userId))
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
     if (plans.length > 0) {
       const plan = plans[0];
-      const tasks = await db
-        .select()
-        .from(coachTasksTable)
-        .where(eq(coachTasksTable.userId, userId))
-        .orderBy(desc(coachTasksTable.createdAt));
+      const allTasks = await db.select().from(coachTasksTable);
+      const tasks = allTasks
+        .filter((t) => Number(t.userId) === Number(userId) || Number(t.planId) === Number(plan.id))
+        .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
       const activeTasks = tasks
         .filter((t) => t.status === "not_started" || t.status === "in_progress")

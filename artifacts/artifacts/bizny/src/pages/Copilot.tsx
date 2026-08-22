@@ -975,7 +975,7 @@ const STATS = [
 
 // ─── Quick action chips ────────────────────────────────────────────────────────
 
-const QUICK_CHIPS = [
+const BASE_QUICK_CHIPS = [
   { icon: ClipboardList, label: "Productivity Clinic", prompt: "I want to start a Productivity Consultation. Help me understand my productive capacity and what I should be building." },
   { icon: Activity, label: "Review My Progress", prompt: "Review my active milestones and tell me what I should focus on today." },
   { icon: Target, label: "Find Opportunities", prompt: "What new opportunities should I be looking at right now in my industry?" },
@@ -985,6 +985,31 @@ const QUICK_CHIPS = [
   { icon: Globe, label: "Industry Targets", prompt: "What are the key industry targets and growth opportunities I should be tracking?" },
   { icon: Handshake, label: "Deal Desk", prompt: "Help me prepare for a business deal or partnership negotiation." },
 ];
+
+const PERSONA_PROMPTS: Record<string, { icon: any; label: string; prompt: string }[]> = {
+  chidi: [
+    { icon: Store, label: "Find Agro-Processors", prompt: "Search the Bizny marketplace for cassava or coconut agro-processors who need equipment like flash dryers or grating machines." },
+    { icon: Target, label: "Procure Stainless Steel", prompt: "What is the best way to secure financing or bulk supplier deals for 304 food-grade stainless steel sheet in Aba?" },
+    { icon: Zap, label: "Add Coach Task", prompt: "Add a high priority task to my Coach board to contact 3 prospective agro-processors in Akwa Ibom for equipment fabrication." },
+  ],
+  amara: [
+    { icon: ShieldCheck, label: "Lab Certification", prompt: "Help me find a certified quality testing laboratory in Lagos to test and certify our high-grade cassava flour and virgin coconut oil." },
+    { icon: Store, label: "Freight Haulage to Lagos", prompt: "Search Bizny for reliable interstate freight logistics operators who can transport 2,000kg weekly from Uyo to Lagos supermarkets." },
+    { icon: Handshake, label: "Retail Supply Deals", prompt: "Are there supermarket chains or off-takers in Lagos looking for certified coconut oil and packaged cassava starch?" },
+  ],
+  fatima: [
+    { icon: ShieldCheck, label: "Inspect Sunshine Agro", prompt: "Look up Sunshine Agro Processing in the Bizny database. What standards and lab assays do they need for NAFDAC and retail supermarket approval?" },
+    { icon: Target, label: "Certification SOPs", prompt: "What are the key microbiological and moisture thresholds required for packaged cassava flour export from Nigeria?" },
+  ],
+  emeka: [
+    { icon: Store, label: "Find South-East Cargo", prompt: "Search marketplace for agro-processors and manufacturers in Uyo, Aba, or Onitsha needing weekly haulage to Lagos." },
+    { icon: Handshake, label: "Formalize Deal Desk Agreement", prompt: "Help me structure a standard haulage contract on Deal Desk for weekly refrigerated freight runs." },
+  ],
+  ada: [
+    { icon: Store, label: "Source Cassava & Coconut Oil", prompt: "Search the Bizny marketplace for verified Nigerian agro-processors supplying certified packaged cassava starch and virgin coconut oil." },
+    { icon: Handshake, label: "Supermarket Purchase Contract", prompt: "Structure a formal supply agreement on Deal Desk with Amara Okon (Sunshine Agro Processing) for 2,000kg monthly cassava starch delivery." },
+  ],
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -1000,6 +1025,23 @@ export default function Copilot() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const firstName = user?.name?.split(" ")[0] || "there";
+  const userLower = (user?.name || "").toLowerCase();
+  const personaKey = userLower.includes("chidi")
+    ? "chidi"
+    : userLower.includes("amara")
+    ? "amara"
+    : userLower.includes("fatima")
+    ? "fatima"
+    : userLower.includes("emeka")
+    ? "emeka"
+    : userLower.includes("ada")
+    ? "ada"
+    : null;
+
+  const activeQuickChips = [
+    ...(personaKey && PERSONA_PROMPTS[personaKey] ? PERSONA_PROMPTS[personaKey] : []),
+    ...BASE_QUICK_CHIPS,
+  ];
 
   const { data: conversations, isLoading: convsLoading } = useListOpenaiConversations({
     query: { queryKey: getListOpenaiConversationsQueryKey() }
@@ -1234,17 +1276,25 @@ export default function Copilot() {
       {/* ── Quick action chips ── */}
       {activeView === "chat" && (
         <div className="flex flex-wrap gap-2 mb-4 shrink-0">
-          {QUICK_CHIPS.map(chip => (
-            <button
-              key={chip.label}
-              onClick={() => handleSend(undefined, chip.prompt)}
-              disabled={isStreaming}
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-xl border border-border bg-card hover:border-primary/40 hover:bg-primary/5 hover:text-primary text-muted-foreground transition-all disabled:opacity-50"
-            >
-              <chip.icon className="w-3.5 h-3.5 shrink-0" />
-              {chip.label}
-            </button>
-          ))}
+          {activeQuickChips.map((chip, idx) => {
+            const isPersonaCustom = idx < (personaKey && PERSONA_PROMPTS[personaKey] ? PERSONA_PROMPTS[personaKey].length : 0);
+            return (
+              <button
+                key={chip.label}
+                onClick={() => handleSend(undefined, chip.prompt)}
+                disabled={isStreaming}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-xl border transition-all disabled:opacity-50",
+                  isPersonaCustom
+                    ? "border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 font-semibold shadow-xs"
+                    : "border-border bg-card hover:border-primary/40 hover:bg-primary/5 hover:text-primary text-muted-foreground"
+                )}
+              >
+                <chip.icon className="w-3.5 h-3.5 shrink-0" />
+                {chip.label}
+              </button>
+            );
+          })}
         </div>
       )}
 

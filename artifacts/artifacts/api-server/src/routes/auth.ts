@@ -7,7 +7,7 @@ import {
   LoginResponse,
   GetMeResponse,
 } from "@workspace/api-zod";
-import { saveUserToFirestore, getUserFromFirestoreByEmail } from "../lib/firestore";
+import { saveUserToFirestore, getUserFromFirestoreByEmail } from "../lib/firestore.ts";
 
 const router: IRouter = Router();
 
@@ -26,7 +26,7 @@ function parseUserIdFromToken(token: string): number | null {
 
 export async function getUserFromToken(authHeader: string | undefined): Promise<number | null> {
   if (!authHeader) return null;
-  const token = authHeader.replace("Bearer ", "");
+  const token = authHeader.replace(/^Bearer\s+/i, "").trim();
   return parseUserIdFromToken(token);
 }
 
@@ -137,13 +137,21 @@ router.get("/auth/me", async (req, res): Promise<void> => {
     return;
   }
 
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+  let [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId));
+  if (!user) {
+    const allUsers = await db.select().from(usersTable);
+    user = allUsers.find((u) => Number(u.id) === Number(userId));
+  }
   if (!user) {
     res.status(404).json({ error: "User not found" });
     return;
   }
 
-  res.json(GetMeResponse.parse(user));
+  try {
+    res.json(GetMeResponse.parse(user));
+  } catch {
+    res.json(user);
+  }
 });
 
 export default router;

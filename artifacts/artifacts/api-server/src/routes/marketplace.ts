@@ -38,17 +38,28 @@ router.get("/marketplace", async (req, res): Promise<void> => {
     return;
   }
 
-  const conditions = [];
-  if (params.data.industry) conditions.push(eq(listingsTable.industry, params.data.industry));
-  if (params.data.country) conditions.push(eq(listingsTable.country, params.data.country));
-  if (params.data.search) conditions.push(ilike(listingsTable.businessName, `%${params.data.search}%`));
+  let rows = await db.select().from(listingsTable).orderBy(listingsTable.createdAt);
 
-  const rows = conditions.length
-    ? await db.select().from(listingsTable).where(and(...conditions)).orderBy(listingsTable.createdAt)
-    : await db.select().from(listingsTable).orderBy(listingsTable.createdAt);
+  if (params.data.industry) {
+    const ind = params.data.industry.toLowerCase();
+    rows = rows.filter(r => r.industry?.toLowerCase() === ind);
+  }
+  if (params.data.country) {
+    const c = params.data.country.toLowerCase();
+    rows = rows.filter(r => r.country?.toLowerCase() === c);
+  }
+  if (params.data.search) {
+    const q = params.data.search.toLowerCase().trim();
+    rows = rows.filter(r =>
+      r.businessName?.toLowerCase().includes(q) ||
+      r.product?.toLowerCase().includes(q) ||
+      r.description?.toLowerCase().includes(q) ||
+      r.industry?.toLowerCase().includes(q)
+    );
+  }
 
   const enriched = await Promise.all(rows.map(enrichListing));
-  res.json(ListListingsResponse.parse(enriched));
+  res.json(enriched);
 });
 
 router.post("/marketplace", async (req, res): Promise<void> => {

@@ -24,6 +24,7 @@ import dealTypesRouter from "./deal-types";
 import knowledgeArticlesRouter from "./knowledge-articles";
 import researchRouter from "./research";
 import adminRouter from "./admin";
+import demoRouter from "./demo";
 
 const router: IRouter = Router();
 
@@ -52,5 +53,6 @@ router.use(dealTypesRouter);
 router.use(knowledgeArticlesRouter);
 router.use("/research", researchRouter);
 router.use("/admin", adminRouter);
+router.use(demoRouter);
 
 export default router;

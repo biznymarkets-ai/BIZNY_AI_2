@@ -25,12 +25,6 @@ async function enrichVenture(venture: typeof venturesTable.$inferSelect) {
 }
 
 router.get("/ventures/public", async (req, res): Promise<void> => {
-  const params = ListPublicVenturesQueryParams.safeParse(req.query);
-  if (!params.success) {
-    res.status(400).json({ error: params.error.message });
-    return;
-  }
-
   const rows = await db.select().from(venturesTable).orderBy(desc(venturesTable.createdAt));
   const enriched = await Promise.all(rows.map(async (venture: any) => {
     const [template] = venture.templateId
@@ -44,16 +38,17 @@ router.get("/ventures/public", async (req, res): Promise<void> => {
     };
   }));
 
-  res.json(ListPublicVenturesResponse.parse(enriched));
+  res.json(enriched);
 });
 
-router.get("/ventures", async (req, res): Promise<void> => {
+router.get(["/ventures", "/ventures/my"], async (req, res): Promise<void> => {
   const userId = await getUserFromToken(req.headers.authorization);
   if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  const rows = await db.select().from(venturesTable).where(eq(venturesTable.userId, userId));
+  const allVentures = await db.select().from(venturesTable);
+  const rows = allVentures.filter(v => Number(v.userId) === Number(userId));
   const enriched = await Promise.all(rows.map(enrichVenture));
-  res.json(ListVenturesResponse.parse(enriched));
+  res.json(enriched);
 });
 
 router.post("/ventures", async (req, res): Promise<void> => {

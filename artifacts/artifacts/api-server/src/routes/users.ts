@@ -62,15 +62,11 @@ router.get("/users", async (req, res): Promise<void> => {
     : [];
   const myFollowingIds = new Set(myFollowing.map((f: any) => f.followingId));
 
-  const result = await Promise.all(rows.map(async (u: any) => {
-    const [{ count: fCount }] = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(userFollowsTable)
-      .where(eq(userFollowsTable.followingId, u.id));
-    const [{ count: gCount }] = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(userFollowsTable)
-      .where(eq(userFollowsTable.followerId, u.id));
+  const allFollows = await db.select().from(userFollowsTable);
+
+  const result = rows.map((u: any) => {
+    const fCount = allFollows.filter((f: any) => Number(f.followingId) === Number(u.id)).length;
+    const gCount = allFollows.filter((f: any) => Number(f.followerId) === Number(u.id)).length;
 
     return {
       id: u.id,
@@ -82,30 +78,30 @@ router.get("/users", async (req, res): Promise<void> => {
       bio: u.bio ?? null,
       avatarUrl: u.avatarUrl ?? null,
       verificationStatus: u.verificationStatus,
-      followersCount: fCount ?? 0,
-      followingCount: gCount ?? 0,
+      followersCount: fCount,
+      followingCount: gCount,
       isFollowing: myFollowingIds.has(u.id),
       createdAt: u.createdAt,
     };
-  }));
+  });
 
   res.json(result);
 });
 
 router.get("/users/:id", async (req, res): Promise<void> => {
-  const params = GetUserParams.safeParse({ id: req.params.id });
-  if (!params.success) {
-    res.status(400).json({ error: params.error.message });
+  const rawId = parseInt(req.params.id, 10);
+  if (isNaN(rawId)) {
+    res.status(400).json({ error: "Invalid user ID" });
     return;
   }
 
-  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, params.data.id));
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.id, rawId));
   if (!user) {
     res.status(404).json({ error: "User not found" });
     return;
   }
 
-  res.json(GetUserResponse.parse(user));
+  res.json(user);
 });
 
 router.patch("/users/:id", async (req, res): Promise<void> => {

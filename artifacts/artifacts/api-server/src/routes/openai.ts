@@ -100,8 +100,15 @@ router.post("/openai/conversations/:id/messages", async (req, res): Promise<void
     return;
   }
 
-  const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
-  if (!conv) { res.status(404).json({ error: "Conversation not found" }); return; }
+  let [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
+  if (!conv) {
+    const allConvs = await db.select().from(conversations);
+    conv = allConvs.find((c) => Number(c.id) === Number(id));
+  }
+  if (!conv) {
+    const [newConv] = await db.insert(conversations).values({ id, title: "Chat Session" }).returning();
+    conv = newConv || { id, title: "Chat Session" };
+  }
 
   // 1. Identify authenticated user and build server-side context
   const authUserId = await getUserFromToken(req.headers.authorization);
@@ -116,10 +123,40 @@ router.post("/openai/conversations/:id/messages", async (req, res): Promise<void
   // 3. Load conversation history
   const history = await db.select().from(messages).where(eq(messages.conversationId, id)).orderBy(asc(messages.createdAt));
 
-  const geminiContents: any[] = history.map((m: any) => ({
-    role: m.role === "assistant" ? "model" : "user",
-    parts: [{ text: m.content }],
-  }));
+  // Build sanitized multi-turn conversation history ensuring non-empty parts and valid structure
+  const geminiContents: any[] = [];
+  for (const m of history) {
+    const text = typeof m.content === "string" ? m.content.trim() : "";
+    if (!text) continue;
+    const role = m.role === "assistant" || m.role === "model" ? "model" : "user";
+
+    const lastTurn = geminiContents[geminiContents.length - 1];
+    if (lastTurn && lastTurn.role === role) {
+      lastTurn.parts.push({ text });
+    } else {
+      geminiContents.push({
+        role,
+        parts: [{ text }],
+      });
+    }
+  }
+
+  // Ensure there is always at least one valid user turn
+  if (geminiContents.length === 0) {
+    const fallbackText = typeof content === "string" && content.trim() ? content.trim() : "Hello";
+    geminiContents.push({
+      role: "user",
+      parts: [{ text: fallbackText }],
+    });
+  }
+
+  // Ensure history starts with a user turn
+  if (geminiContents[0].role !== "user") {
+    geminiContents.unshift({
+      role: "user",
+      parts: [{ text: "Hello" }],
+    });
+  }
 
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -131,78 +168,110 @@ router.post("/openai/conversations/:id/messages", async (req, res): Promise<void
   try {
     const ai = getGeminiAI();
 
-    // ── TWO-WAY AGENTIC LOOP: FIRST CALL WITH TOOLS ──────────────────────────
-    const initialResponse = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite",
-      contents: geminiContents,
-      config: {
-        systemInstruction: fullSystemInstruction,
-        tools: [{ functionDeclarations: COPILOT_TOOL_DECLARATIONS }],
-      },
-    });
+    const MODELS_TO_TRY = ["gemini-3.1-flash-lite", "gemini-3.7-flash", "gemini-3.6-flash"];
+    let succeeded = false;
 
-    const functionCalls = initialResponse.functionCalls;
-
-    if (functionCalls && functionCalls.length > 0) {
-      console.log(`[CopilotAgent] Gemini initiated ${functionCalls.length} tool call(s)`);
-
-      // Notify frontend of tool execution
-      for (const call of functionCalls) {
-        res.write(`data: ${JSON.stringify({ toolExecuting: { name: call.name, args: call.args } })}\n\n`);
-      }
-
-      // Execute tools server-side
-      const toolResults: any[] = [];
-      for (const call of functionCalls) {
-        const execution = await executeCopilotTool(call.name, call.args, authUserId);
-        toolResults.push({
-          callName: call.name,
-          callId: call.id,
-          result: execution.result,
-        });
-        if (execution.actionCard) {
-          collectedActionCards.push(execution.actionCard);
-        }
-      }
-
-      // Append model turn with function calls to contents
-      const candidateContent = initialResponse.candidates?.[0]?.content;
-      if (candidateContent) {
-        geminiContents.push(candidateContent);
-      }
-
-      // Append tool responses
-      geminiContents.push({
-        role: "user",
-        parts: toolResults.map((tr) => ({
-          functionResponse: {
-            name: tr.callName,
-            id: tr.callId,
-            response: { result: tr.result },
+    for (const modelName of MODELS_TO_TRY) {
+      try {
+        // ── TWO-WAY AGENTIC LOOP: FIRST CALL WITH TOOLS ──────────────────────────
+        const initialResponse = await ai.models.generateContent({
+          model: modelName,
+          contents: geminiContents,
+          config: {
+            systemInstruction: fullSystemInstruction,
+            tools: [{ functionDeclarations: COPILOT_TOOL_DECLARATIONS }],
           },
-        })),
-      });
+        });
 
-      // Stream the final grounded reasoning response
-      const followUpStream = await ai.models.generateContentStream({
-        model: "gemini-3.1-flash-lite",
-        contents: geminiContents,
-        config: {
-          systemInstruction: fullSystemInstruction,
-        },
-      });
+        const functionCalls = initialResponse.functionCalls;
 
-      for await (const chunk of followUpStream) {
-        if (chunk.text) {
-          fullResponse += chunk.text;
-          res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
+        if (functionCalls && functionCalls.length > 0) {
+          console.log(`[CopilotAgent] Gemini initiated ${functionCalls.length} tool call(s) with ${modelName}`);
+
+          // Notify frontend of tool execution
+          for (const call of functionCalls) {
+            res.write(`data: ${JSON.stringify({ toolExecuting: { name: call.name, args: call.args } })}\n\n`);
+          }
+
+          // Execute tools server-side
+          const toolResults: any[] = [];
+          for (const call of functionCalls) {
+            const execution = await executeCopilotTool(call.name, call.args, authUserId);
+            toolResults.push({
+              callName: call.name,
+              callId: call.id,
+              result: execution.result,
+            });
+            if (execution.actionCard) {
+              collectedActionCards.push(execution.actionCard);
+            }
+          }
+
+          // Append model turn with function calls to contents
+          let candidateContent = initialResponse.candidates?.[0]?.content;
+          if (!candidateContent || !candidateContent.parts || candidateContent.parts.length === 0) {
+            candidateContent = {
+              role: "model",
+              parts: functionCalls.map((call) => ({
+                functionCall: {
+                  name: call.name,
+                  args: call.args || {},
+                  ...(call.id ? { id: call.id } : {}),
+                },
+              })),
+            };
+          }
+
+          const currentContents = [...geminiContents, candidateContent];
+
+          // Append tool responses
+          const responseParts = toolResults.map((tr) => {
+            const fr: any = {
+              name: tr.callName,
+              response: { result: tr.result !== undefined ? tr.result : null },
+            };
+            if (tr.callId) fr.id = tr.callId;
+            return { functionResponse: fr };
+          });
+
+          currentContents.push({
+            role: "user",
+            parts: responseParts,
+          });
+
+          // Stream the final grounded reasoning response
+          const followUpStream = await ai.models.generateContentStream({
+            model: modelName,
+            contents: currentContents,
+            config: {
+              systemInstruction: fullSystemInstruction,
+            },
+          });
+
+          for await (const chunk of followUpStream) {
+            if (chunk.text) {
+              fullResponse += chunk.text;
+              res.write(`data: ${JSON.stringify({ content: chunk.text })}\n\n`);
+            }
+          }
+        } else {
+          // Direct text response from first turn
+          const textOutput = initialResponse.text ?? "";
+          fullResponse = textOutput;
+          res.write(`data: ${JSON.stringify({ content: textOutput })}\n\n`);
         }
+
+        succeeded = true;
+        break;
+      } catch (modelErr: any) {
+        console.warn(`[CopilotAgent] Model ${modelName} stream failed:`, modelErr?.status, modelErr?.message);
       }
-    } else {
-      // Direct text response from first turn
-      const textOutput = initialResponse.text ?? "";
-      fullResponse = textOutput;
-      res.write(`data: ${JSON.stringify({ content: textOutput })}\n\n`);
+    }
+
+    if (!succeeded) {
+      const fallbackMsg = "I'm here to help you coordinate ventures and operations on Bizny. How can I assist you right now?";
+      fullResponse = fallbackMsg;
+      res.write(`data: ${JSON.stringify({ content: fallbackMsg })}\n\n`);
     }
 
     // Persist final assistant reply

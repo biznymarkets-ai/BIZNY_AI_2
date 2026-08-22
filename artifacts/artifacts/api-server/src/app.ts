@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health checks for Cloud Run container probes
-app.get(["/healthz", "/health", "/api/healthz"], (_req, res) => {
+app.get(["/healthz", "/health", "/api/healthz", "/api/health", "/readyz", "/livez"], (_req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 

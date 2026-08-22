@@ -9,7 +9,7 @@
     "scripts/scripts"
   ],
   "scripts": {
-    "dev": "npm run build --workspace=@workspace/bizny && npm run dev --workspace=@workspace/api-server",
+    "dev": "node server.ts",
     "build": "rm -rf dist && npm run build --workspace=@workspace/bizny && npm run build --workspace=@workspace/api-server && mkdir -p dist && cp -r artifacts/artifacts/bizny/dist/public dist/ && cp -r artifacts/artifacts/api-server/dist/. dist/",
     "start": "node server.ts",
     "lint": "tsc --build",

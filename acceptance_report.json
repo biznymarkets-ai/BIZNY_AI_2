@@ -1,0 +1,140 @@
+{
+  "test1": {
+    "personas": [
+      {
+        "persona": "chidi",
+        "switchOk": true,
+        "userName": "Chidi Okafor",
+        "userRole": "Producer / Agro-Processor",
+        "venture": "High-Grade Cassava Starch Flash-Drying Facility",
+        "taskCount": 4,
+        "tasksPreview": [
+          "Review and approve Flash Dryer fabrication milestone contract on Deal Desk with Amara Eze",
+          "Dispatch 5kg raw cassava starch sample to Dr. Fatima Al-Mansoor for moisture and purity analysis"
+        ]
+      },
+      {
+        "persona": "amara",
+        "switchOk": true,
+        "userName": "Amara Eze",
+        "userRole": "Manufacturer / Fabricator",
+        "venture": "Standardized 500kg/hr Agro Flash Dryer Fabrication Line",
+        "taskCount": 3,
+        "tasksPreview": [
+          "Finalize engineering bill of materials for Chidi Okafor's 500kg/hr flash dryer unit",
+          "Order 18 gauge SS-304 stainless steel sheets from verified Aba steel importer"
+        ]
+      },
+      {
+        "persona": "fatima",
+        "switchOk": true,
+        "userName": "Dr. Fatima Al-Mansoor",
+        "userRole": "Field Agent / Quality Auditor",
+        "venture": "Accredited Rapid Quality Certification for West African Agro-Processors",
+        "taskCount": 2,
+        "tasksPreview": [
+          "Process and issue Certificate of Analysis for Chidi Okafor's Nsukka starch sample",
+          "Review NAFDAC Good Manufacturing Practice (GMP) audit checklist for agro-processing mills"
+        ]
+      },
+      {
+        "persona": "emeka",
+        "switchOk": true,
+        "userName": "Emeka Nwosu",
+        "userRole": "Service Provider / Fleet Operator",
+        "venture": "Scheduled Rural-to-Urban Industrial Cargo Consolidation Corridor",
+        "taskCount": 1,
+        "tasksPreview": [
+          "Schedule recurring weekly pickup for Chidi Okafor's 50kg starch pallets in Nsukka"
+        ]
+      },
+      {
+        "persona": "ada",
+        "switchOk": true,
+        "userName": "Adaobi 'Ada' Adeleke",
+        "userRole": "Entrepreneur / Brand Formulator",
+        "venture": "Packaged High-Purity Cassava Flour & Instant Starch Retail Brand",
+        "taskCount": 1,
+        "tasksPreview": [
+          "Sign 12-month supply deal with Chidi Okafor (Nsukka Starch Mills) on Deal Desk"
+        ]
+      }
+    ]
+  },
+  "test2": {
+    "groundings": [
+      {
+        "persona": "chidi",
+        "copilotResponse": "Hello Chidi! It’s great to connect with you again. I have your current business and venture details updated in our system. Here is the summary of your current operational status:\n\n### **Your Business Profile**\n*   **Business:** Nsukka Starch & Agri-Processing Mills\n*   **Role:** Producer / Agro-Processor\n*   **Location:** Nsukka, Enugu State, Nigeria\n*   **Key Skills:** Cassava Processing, Starch Extraction, Outgrower Management, and Quality Grading.\n\n### **Current Venture**\n*   **Venture:** High-Grade Cassava Starch Flash-Drying Facility\n*   **Status:** Active (Progress: 45%, Day 18)\n*   **Goal:** To establish an automated 500kg/hr flash drying and milling facility to process 40 tons of cassava weekly into premium, industrial-grade starch.\n*   **Impact:** You are solving the critical issue of traditional sun-drying, which currently causes 35% product loss and fails to meet industrial moisture standards (10–12%).\n\n### **Current Bottlenecks**\nWe are currently focused on overcoming three specific hurdles to get your facility to full operational capacity:\n1.  **Flash Dryer Fabrication:** Finalizing the machinery setup with Amara Eze.\n2.  **Lab Certification:** Achieving certified food-grade status (specifically moisture < 12%) through Dr. Fatima Al-Mansoor.\n3.  **Logistics:** Coordinating efficient freight haulage to reach commercial buyers in the Western Nigeria (Lagos/Ibadan) corridor using Emeka Nwosu (Niger-Trans).\n\nYou are doing great work—your productivity score is currently a solid **78**, and you’re on a **14-day streak**. \n\nIs there a specific area you'd like to dive into today, perhaps focusing on the lab analysis or the machinery milestone? I am ready to help you push forward."
+      },
+      {
+        "persona": "amara",
+        "copilotResponse": "Hello Amara! It's great to connect with you. Based on your current Bizny profile and venture status, here is a snapshot of where you stand:\n\n### **Your Business & Location**\n*   **Business:** You are the founder of **Eze Precision Metalworks & Agro-Machinery**, based in the industrial hub of **Aba, Abia State**.\n*   **Expertise:** Your core strengths lie in metal fabrication, CAD design, industrial machining, and thermal airflow engineering—all of which are critical for high-end agro-machinery production.\n\n### **Your Current Venture**\n*   **Venture:** You are currently focused on the **Standardized 500kg/hr Agro Flash Dryer Fabrication Line** (Venture ID: 13).\n*   **Progress:** You are at 60% completion (Day 24).\n*   **Objective:** You are working to standardize the modular production of these dryers using food-grade SS-304, specifically tailored to handle local voltage and fuel constraints, providing a cost-effective, maintainable alternative to expensive imported units.\n\n### **Current Bottlenecks & Strategic Focus**\nYou are currently navigating two primary challenges to move from fabrication to delivery:\n1.  **Material Sourcing:** You need a reliable source for certified **SS-304 food-grade stainless steel sheets** at stable pricing.\n2.  **Financial Security:** You are working to secure **escrow milestone commitments** from your buyers before committing your inventory to fabrication.\n\n### **Coach Execution Update**\nYou’ve been maintaining excellent productivity (Score: 85) with a 21-day streak. Your current action plan is:\n*   **High Priority:** Finalizing the order for 18-gauge SS-304 sheets from a verified Aba supplier.\n*   **Medium Priority:** Drafting the Deal Desk counterparty terms for your upcoming Nsukka installation and warranty.\n\n**How can I support you today, Amara?** Would you like me to help you search for verified stainless steel suppliers in Aba, or should we draft those counterparty terms for your Nsukka client?"
+      },
+      {
+        "persona": "fatima",
+        "copilotResponse": "Hello, Dr. Al-Mansoor. It’s great to connect with you again. Given your role as a Field Agent and Quality Auditor, your work is crucial for the integrity of our regional value chains.\n\nBased on our current Bizny context, here is the summary of your profile and business activities:\n\n### **Your Profile**\n*   **Name:** Dr. Fatima Al-Mansoor\n*   **Business:** Sahel Agro-Standards & Testing Laboratory\n*   **Primary Industry:** Consulting\n*   **Key Expertise:** Chemical Analysis, Export Compliance, Food Safety Standards, and Lab Audits.\n\n### **Your Active Venture**\n*   **Title:** Accredited Rapid Quality Certification for West African Agro-Processors\n*   **Objective:** You are providing ISO-aligned Certificates of Analysis (CoA) to rural agro-processors within 48 hours to help them clear export and supermarket quality audits.\n*   **Progress:** You are currently on Day 30 of your plan, with 70% progress toward your goal of certifying 20 regional processors.\n*   **Locations:** You operate across Lagos and Kano, Nigeria.\n\n### **Your Current Bottleneck & Strategy**\n*   **Primary Bottleneck:** You have identified a specific logistics challenge regarding the **turnaround time for collecting samples from rural farm-gates in the Southeast.**\n*   **Coach Plan:** You are currently tracking at a 92% productivity score. Your active plan focuses on clearing individual certification requests (like Chidi Okafor’s Nsukka starch sample) and ensuring your audit protocols (like the NAFDAC GMP checklist) are current.\n\n**How can I assist you with these priorities today?** We could look for partners in the Southeast to help streamline your sample logistics, or I can help you finalize the NAFDAC GMP review if you’re ready to tackle that task."
+      },
+      {
+        "persona": "emeka",
+        "copilotResponse": "Hello Emeka, it’s great to connect with you again. I have your current business and venture details synced up. Here is the snapshot of your current operation:\n\n### **Business & Venture Overview**\n*   **Business:** You are the lead at **Niger-Trans Haulage & Rural Freight Aggregators**, operating out of **Onitsha, Anambra State**.\n*   **Venture:** Your active venture is the **Scheduled Rural-to-Urban Industrial Cargo Consolidation Corridor** (Venture ID: 32). You are currently at the 50% mark (Day 20) of this project.\n*   **The Mission:** You are tackling the 20-30% loss producers face due to fragmented logistics by running scheduled, twice-weekly consolidated freight runs. You’ve brought modern standards to this route, including GPS tracking and insured waybills, to bridge the gap between Enugu/Aba agro-processors and Lagos/Ibadan markets.\n\n### **Current Status & Focus**\n*   **Performance:** You’re maintaining a strong productivity score of **88** with a **19-day streak**.\n*   **Coach Task:** You are currently managing a **High Priority** task: *Scheduling a recurring weekly pickup for Chidi Okafor's 50kg starch pallets in Nsukka*.\n*   **Your Stated Bottlenecks:**\n    1.  **Fuel Price Volatility:** Hedging against fluctuating costs to keep your margins stable.\n    2.  **Return Cargo Optimization:** Maximizing the volume of goods hauled from Lagos back to the Southeast to avoid empty backhauls.\n\nYou have a solid foundation with your 8 flatbed trucks and 2 refrigerated vans. Is there a specific area you'd like to dive into today? For instance, I can help you search for potential return-cargo partners in the Lagos area or look for logistics efficiency templates that might help with your fuel hedging strategy."
+      },
+      {
+        "persona": "ada",
+        "copilotResponse": "Hello Ada! It’s great to connect with you again. You’re doing an incredible job with **NutriRoot Foods & Consumer Goods**—your productivity streak of 25 days is impressive, and you are clearly well-positioned for scale.\n\nHere is a summary of where you stand right now based on your profile and active venture:\n\n### **Your Business & Venture**\n*   **Business Name:** NutriRoot Foods & Consumer Goods.\n*   **Current Venture:** You are scaling your **Packaged High-Purity Cassava Flour & Instant Starch Retail Brand**.\n*   **Status:** You are at 65% progress on Day 28 of this venture.\n*   **Value Proposition:** You are filling a critical gap by providing modern, premium, gluten-free, and sand-free cassava flour in 1kg and 5kg standup pouches to 24 supermarkets across Ibadan and Lagos.\n*   **Infrastructure:** You are already equipped with a modern automated packaging line and have secured NAFDAC registration, which is a massive milestone.\n\n### **Your Location**\n*   You are operating out of **Ibadan, Oyo State, Nigeria**, with your distribution reach extending into Lagos.\n\n### **Your Current Bottleneck & Strategy**\n*   **The Bottleneck:** Your biggest hurdle right now is **raw material quality inconsistency**. You are struggling to get reliable, high-grade starch (moisture < 12%) because the spot market sellers you’ve encountered haven't met your strict standards.\n*   **The Goal:** You are aiming to scale to **10,000 pouches per month**, which requires locking in a consistent supply of **2 MT/month of verified food-grade starch**.\n*   **The Execution Plan:** You are currently focused on a **HIGH priority task**: signing a 12-month supply deal with Chidi Okafor of Nsukka Starch Mills through the Bizny Deal Desk.\n\nIs there anything specific regarding the negotiations with Chidi Okafor or the quality auditing process with Dr. Fatima Al-Mansoor that you’d like me to assist with today?"
+      }
+    ]
+  },
+  "test3": {
+    "user": "Chidi Okafor",
+    "response": "Hello, Chidi. As your Productivity Advocate, I've checked the Bizny marketplace database for you. \n\nCurrently, there are no verified flash dryer suppliers listed in the marketplace. \n\nSince your active venture, **High-Grade Cassava Starch Flash-Drying Facility**, identifies **Amara Eze** as the needed Certified Agro-Machinery Fabricator, would you like me to create a coach task to initiate direct outreach to her or explore alternative fabrication partners?",
+    "hasActionCards": false
+  },
+  "test4": {
+    "response": "Hello, Chidi! It’s good to connect with you again. I see you are making steady progress on your High-Grade Cassava Starch Flash-Drying Facility—45% completion is a strong milestone for Day 18.\n\nRegarding your request for a formal SOP blueprint for cassava flash drying and industrial refining: I have checked the Bizny template repository, and currently, there is no standardized SOP blueprint indexed for that specific process. \n\nBecause your venture requires meeting strict industrial thresholds (moisture < 12%), relying on a generic document could be a risk to your quality certification. Here is how I recommend we proceed:\n\n1.  **Professional Consultation:** Since you are already in contact with Dr. Fatima Al-Mansoor for your lab audit, I suggest we leverage her expertise. I can help you draft a request for her to outline the specific quality control points needed to ensure your output meets the pharmaceutical/commercial grade.\n2.  **Task Creation:** Would you like me to create a task to \"Draft technical parameters for starch refining SOP\" so you can consult with your technical team or Dr. Al-Mansoor to document your proprietary process?\n3.  **Active Milestones:** Remember that your current priority is the Flash Dryer fabrication contract with Amara Eze. Ensuring the machine specs match the refining requirements is essential for your SOP. Should I add a sub-task to your current \"Review and approve Flash Dryer fabrication\" task to ensure the design specs include built-in moisture monitoring? \n\nLet me know how you’d like to move forward, Chidi. We need to keep that 78 productivity score climbing!"
+  },
+  "test5": {
+    "response": "Hello, Chidi! It’s good to connect with you again. I see you're making steady progress on the **High-Grade Cassava Starch Flash-Drying Facility** (currently at 45% completion).\n\nRegarding your search for commercial offtakers, I have checked the **Bizny Marketplace** for active opportunities. Unfortunately, there are currently no open offtake opportunities listed for high-grade cassava starch in our database. \n\nHowever, since your active venture goal is to secure two guaranteed commercial offtakers, I suggest we leverage your existing network. Specifically, **Ada Adeleke** is already listed as a potential collaborator for your venture. \n\nWould you like me to **create a coach task** to reach out to her or other potential local food-grade manufacturers to initiate those offtaker discussions? I can also help you draft a professional outreach template highlighting your upcoming 500kg/hr capacity and quality standards to help you secure those contracts."
+  },
+  "test6": {
+    "response": "Hello Chidi, it's great to see your progress on the flash-drying facility.\n\nI have checked the Bizny database for you: **Eze Precision Metalworks** is indeed listed and holds a **VERIFIED_BY_FIELD_AGENT** status.\n\nThey are recorded as a reputable fabricator specializing in heavy-duty, food-grade agro-processing machinery, including the flash dryers you need for your Nsukka facility. Given that your contract review with Amara Eze is currently marked as a high-priority task, their verified status should give you added confidence as you move forward with the fabrication milestone.\n\nIs there anything specific you would like me to help you draft or prepare for that contract review?"
+  },
+  "test7": {
+    "reply": "Hello Chidi, I have successfully added that task to your board.\n\nMaintaining direct alignment with Amara Eze is crucial for the flash-drying facility's timeline, especially since the flash dryer is the primary component needed to overcome your current 35% product loss bottleneck.\n\n**Updated Coach Task:**\n*   **Title:** Follow up with Amara Eze regarding Flash Dryer delivery schedule\n*   **Priority:** HIGH\n*   **Status:** Not Started\n\nSince this is set for tomorrow, remember to have your milestone contract details from the Deal Desk handy when you reach out. Staying on top of this will keep your 90-day goal for reaching 500kg/hr capacity firmly on track. \n\nHow are you feeling about the rest of your high-priority items, specifically the sample dispatch to Dr. Fatima Al-Mansoor?",
+    "beforeCount": 4,
+    "afterCount": 5,
+    "createdTaskId": 7,
+    "createdTaskTitle": "Review and approve Flash Dryer fabrication milestone contract on Deal Desk with Amara Eze",
+    "createdTaskPriority": "high",
+    "derivedUserId": 1
+  },
+  "test8": {
+    "amaraUserId": 12,
+    "chidiUserId": 1,
+    "amaraSawChidiTask": false,
+    "chidiStillHasTask": true
+  },
+  "test9": {
+    "response": "Hello Chidi, it's great to connect with you again at Nsukka Starch & Agri-Processing Mills.\n\nRegarding your search for **ZZZ_TEST_SUPPLIER_987654321** in Lagos, I have cross-referenced our current Bizny marketplace directory, and I am unable to locate a record matching that supplier ID. It is possible the listing is inactive, pending verification, or not currently registered within our system.\n\nSince you are currently pushing forward with your **High-Grade Cassava Starch Flash-Drying Facility** (which is already at 45% progress!), do you need help tracking down a different machinery fabricator or perhaps re-engaging with one of your existing collaborators like Amara Eze? I have your pending tasks ready for review whenever you're set."
+  },
+  "test10": {
+    "usersBefore": 5,
+    "usersAfter": 5,
+    "venturesBefore": 5,
+    "venturesAfter": 5,
+    "listingsBefore": 5,
+    "listingsAfter": 5,
+    "oppsBefore": 2,
+    "oppsAfter": 2,
+    "idempotent": true
+  },
+  "test11": {
+    "httpStatus": 200,
+    "contentType": "text/event-stream",
+    "hasToolExecuting": true,
+    "hasDataContent": true,
+    "hasContentsAreRequiredError": false,
+    "streamLength": 1376,
+    "streamSample": "data: {\"toolExecuting\":{\"name\":\"search_marketplace\",\"args\":{\"industry\":\"Agriculture\",\"query\":\"agro-processing equipment fabricator\"}}}\n\ndata: {\"content\":\"I have\"}\n\ndata: {\"content\":\" searched the Bizny marketplace for agro-processing equipment fabricators, and currently, there are no verified\"}\n\ndata: {\"content\":\" listings matching that criteria in"
+  }
+}
