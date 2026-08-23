@@ -229,10 +229,10 @@ function createInMemoryDb() {
           const raw = Array.isArray(vals) ? vals : [vals];
           insertedValues = raw.map((v) => {
             const row = {
-              id: v.id || idCounter++,
-              createdAt: v.createdAt || new Date(),
-              updatedAt: v.updatedAt || new Date(),
               ...v,
+              id: v.id || idCounter++,
+              createdAt: v.createdAt ? (v.createdAt instanceof Date ? v.createdAt : new Date(v.createdAt)) : new Date(),
+              updatedAt: v.updatedAt ? (v.updatedAt instanceof Date ? v.updatedAt : new Date(v.updatedAt)) : new Date(),
             };
             data.push(row);
             return row;
