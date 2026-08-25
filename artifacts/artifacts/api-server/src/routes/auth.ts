@@ -210,6 +210,80 @@ router.post("/auth/login", async (req, res): Promise<void> => {
   }
 });
 
+router.post("/auth/google", async (req, res): Promise<void> => {
+  const email = String(req.body?.email || "").trim().toLowerCase();
+  const name = String(req.body?.name || "").trim();
+  const avatarUrl = String(req.body?.avatarUrl || req.body?.photoURL || "").trim();
+  const googleUid = String(req.body?.googleUid || req.body?.uid || "").trim();
+
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ error: "A valid email is required for Google Sign-In" });
+    return;
+  }
+
+  // 1. Search if user already exists
+  let allUsers = await db.select().from(usersTable);
+  let user = allUsers.find((u: any) => u.email?.toLowerCase() === email);
+
+  // If not in local DB, check Firestore
+  if (!user) {
+    const fsUser = await getUserFromFirestoreByEmail(email);
+    if (fsUser) user = fsUser;
+  }
+
+  let isNewUser = false;
+
+  // 2. If user does not exist, create new user account
+  if (!user) {
+    isNewUser = true;
+    const displayName = name || email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    try {
+      const [inserted] = await db.insert(usersTable).values({
+        name: displayName,
+        email,
+        avatarUrl: avatarUrl || null,
+        country: "Nigeria",
+        industry: "General",
+        role: "Member",
+        verificationStatus: "unverified",
+        createdAt: new Date(),
+      }).returning();
+      user = inserted;
+    } catch (err) {
+      console.warn("[Auth:Google] DB insert fallback:", err);
+      user = {
+        id: Math.floor(Date.now() / 1000) + Math.floor(Math.random() * 1000),
+        name: displayName,
+        email,
+        avatarUrl: avatarUrl || null,
+        country: "Nigeria",
+        industry: "General",
+        role: "Member",
+        verificationStatus: "unverified",
+        createdAt: new Date(),
+      };
+    }
+  } else {
+    // If user exists and doesn't have an avatar, update with Google photo
+    if (avatarUrl && !user.avatarUrl) {
+      try {
+        await db.update(usersTable).set({ avatarUrl }).where(eq(usersTable.id, user.id));
+        user.avatarUrl = avatarUrl;
+      } catch (err) {
+        console.warn("[Auth:Google] Could not update avatar:", err);
+      }
+    }
+  }
+
+  const safeUser = normalizeUser(user);
+
+  // Sync to Firestore in background
+  saveUserToFirestore(safeUser).catch((e) => console.warn("Firestore sync warning:", e));
+
+  const token = makeToken(safeUser.id);
+  res.json({ token, user: safeUser, isNewUser });
+});
+
 router.get("/auth/me", async (req, res): Promise<void> => {
   const userId = await getUserFromToken(req.headers.authorization);
   if (!userId) {

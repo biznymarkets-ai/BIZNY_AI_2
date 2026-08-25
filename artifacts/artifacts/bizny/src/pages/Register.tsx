@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import IndustryStampSelector from "@/components/IndustryStampSelector";
+import GoogleAuthButton from "@/components/GoogleAuthButton";
+import BiznyLogo from "@/components/BiznyLogo";
 
 const ROLES = [
   "Student",
@@ -194,8 +196,7 @@ export default function Register() {
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <Link href="/">
             <div className="flex items-center gap-2.5 cursor-pointer">
-              <img src="/logo.jpg" alt="Bizny" className="h-8 w-8 rounded-lg object-cover" />
-              <span className="text-lg font-bold tracking-tight text-gray-900">Bizny</span>
+              <BiznyLogo size="md" />
             </div>
           </Link>
           <div className="text-sm text-gray-500">
@@ -250,9 +251,20 @@ export default function Register() {
                 {step === 1 && (
                   <div className="p-7 space-y-5 animate-in fade-in slide-in-from-right-4 duration-200">
                     <div>
-                      <h2 className="text-xl font-bold text-gray-900">Who are you?</h2>
-                      <p className="text-sm text-gray-500 mt-0.5">Your identity on Bizny</p>
+                      <h2 className="text-xl font-bold text-gray-900">Create your account</h2>
+                      <p className="text-sm text-gray-500 mt-0.5">Join Bizny with Google or fill your profile below</p>
                     </div>
+
+                    <GoogleAuthButton mode="signup" />
+
+                    <div className="relative flex items-center justify-center">
+                      <div className="border-t border-gray-100 w-full" />
+                      <span className="bg-white px-3 text-xs text-gray-400 font-medium uppercase tracking-wider shrink-0">
+                        Or enter details manually
+                      </span>
+                      <div className="border-t border-gray-100 w-full" />
+                    </div>
+
                     <FormField control={form.control} name="name" render={({ field }) => (
                       <FormItem>
                         <FormLabel className={labelClass}>Full Name</FormLabel>

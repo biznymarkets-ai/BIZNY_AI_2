@@ -36,6 +36,7 @@ import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { INDUSTRY_SECTORS, SPECIFIC_ACTIVITIES, VALUE_CHAIN_STAGES } from "@/lib/countries";
 import { SyntheticUniverseBar } from "@/components/SyntheticUniverseBar";
+import BiznyLogo from "@/components/BiznyLogo";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Home",
@@ -396,7 +397,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </button>
 
         <div className="flex items-center gap-2 ml-2">
-          <img src="/logo.jpg" alt="Bizny" className="h-7 w-7 rounded-full border border-primary/20" />
+          <BiznyLogo size="sm" showText={false} />
           <span className="font-display font-bold text-base text-foreground tracking-tight">
             {currentTitle === "Home" ? "Bizny" : currentTitle}
           </span>
@@ -444,7 +445,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-2.5">
-                <img src="/logo.jpg" alt="Bizny" className="h-8 w-8 rounded-full" />
+                <BiznyLogo size="md" showText={false} />
                 <div>
                   <p className="font-display font-bold text-foreground leading-none">{user?.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{user?.role}</p>

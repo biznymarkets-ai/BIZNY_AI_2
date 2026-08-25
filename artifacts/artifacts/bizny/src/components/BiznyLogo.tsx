@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface BiznyLogoProps {
   className?: string;
@@ -11,6 +11,8 @@ export const BiznyLogo: React.FC<BiznyLogoProps> = ({
   size = "md",
   showText = true,
 }) => {
+  const [imgError, setImgError] = useState(false);
+
   const sizeMap = {
     sm: "h-6 w-6",
     md: "h-8 w-8",
@@ -27,15 +29,20 @@ export const BiznyLogo: React.FC<BiznyLogoProps> = ({
 
   return (
     <div className={`inline-flex items-center gap-2.5 ${className}`}>
-      <img
-        src="/Bizny_Logo_final.png"
-        alt="Bizny Logo"
-        className={`${sizeMap[size]} object-contain rounded-xl shrink-0`}
-        onError={(e) => {
-          // Fallback to logo.jpg if Bizny_Logo_final.png fails
-          e.currentTarget.src = "/logo.jpg";
-        }}
-      />
+      {!imgError ? (
+        <img
+          src="/Bizny_Logo_final.png"
+          alt="Bizny Logo"
+          className={`${sizeMap[size]} object-contain rounded-xl shrink-0`}
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <div
+          className={`${sizeMap[size]} rounded-xl bg-gradient-to-br from-[#033B4C] to-[#0A5D75] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm`}
+        >
+          <span className="font-display">B</span>
+        </div>
+      )}
       {showText && (
         <span className={`font-bold font-display tracking-tight text-[#033B4C] dark:text-white ${textMap[size]}`}>
           Bizny
@@ -44,3 +51,7 @@ export const BiznyLogo: React.FC<BiznyLogoProps> = ({
     </div>
   );
 };
+
+export default BiznyLogo;
+
+

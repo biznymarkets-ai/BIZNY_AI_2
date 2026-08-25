@@ -198,7 +198,12 @@ router.post(["/copilot", "/copilot/chat"], async (req, res): Promise<void> => {
     });
   }
 
-  res.json(ChatWithCopilotResponse.parse({ reply, sessionId, suggestedActions }));
+  res.json({
+    reply,
+    sessionId,
+    conversationId: sessionId,
+    suggestedActions,
+  });
 });
 
 router.get("/copilot/history", async (req, res): Promise<void> => {

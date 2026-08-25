@@ -43,27 +43,41 @@ function getColumnName(col: any): string {
   return "";
 }
 
+const SQL_OPERATOR_WORDS = new Set(["=", "!=", "<>", ">", "<", ">=", "<=", "and", "or", "not", "is", "null", "is null", "is not null", "like", "ilike", "in", "not in", "between"]);
+
+function isSqlOperatorToken(val: any): boolean {
+  if (typeof val === "string") {
+    const trimmed = val.trim().toLowerCase();
+    if (SQL_OPERATOR_WORDS.has(trimmed) || /^[=!<>&|~%+\-*/(),]+$/.test(trimmed)) return true;
+  }
+  if (Array.isArray(val)) {
+    if (val.length === 0) return true;
+    return val.every(item => typeof item === "string" && isSqlOperatorToken(item));
+  }
+  return false;
+}
+
 function extractValueFromChunk(chunk: any): any {
   if (chunk === undefined || chunk === null) return undefined;
+  if (isSqlOperatorToken(chunk)) return undefined;
+  if (chunk.constructor?.name === "StringChunk") return undefined;
+  if (chunk.constructor?.name === "Column" || chunk._?.columnName || chunk[Symbol.for("drizzle:Name")]) return undefined;
+
   if (typeof chunk === "string" || typeof chunk === "number" || typeof chunk === "boolean") return chunk;
   if (chunk instanceof Date) return chunk;
-  if (chunk.value !== undefined) return chunk.value;
-  if (chunk.param !== undefined) return chunk.param;
-  if (chunk.val !== undefined) return chunk.val;
-  if (chunk.arg !== undefined) return chunk.arg;
-  if (chunk.encoder?.value !== undefined) return chunk.encoder.value;
-  if (chunk.encoder?.val !== undefined) return chunk.encoder.val;
+
+  // Drizzle Param / Placeholder
+  if (chunk.value !== undefined && !isSqlOperatorToken(chunk.value)) return chunk.value;
+  if (chunk.param !== undefined && !isSqlOperatorToken(chunk.param)) return chunk.param;
+  if (chunk.val !== undefined && !isSqlOperatorToken(chunk.val)) return chunk.val;
+  if (chunk.arg !== undefined && !isSqlOperatorToken(chunk.arg)) return chunk.arg;
+  if (chunk.encoder?.value !== undefined && !isSqlOperatorToken(chunk.encoder.value)) return chunk.encoder.value;
+  if (chunk.encoder?.val !== undefined && !isSqlOperatorToken(chunk.encoder.val)) return chunk.encoder.val;
+
   if (chunk.queryChunks && Array.isArray(chunk.queryChunks)) {
     for (const c of chunk.queryChunks) {
       const v = extractValueFromChunk(c);
       if (v !== undefined) return v;
-    }
-  }
-  if (typeof chunk === "object") {
-    for (const key of Object.keys(chunk)) {
-      if (typeof chunk[key] === "string" || typeof chunk[key] === "number" || typeof chunk[key] === "boolean") {
-        return chunk[key];
-      }
     }
   }
   return undefined;
@@ -112,7 +126,7 @@ function matchesWhere(item: any, condition: any): boolean {
     if (condition.left !== undefined && condition.right !== undefined) {
       const colName = getColumnName(condition.left);
       const val = extractValueFromChunk(condition.right);
-      if (colName) {
+      if (colName && val !== undefined) {
         if (item[colName] !== undefined) {
           return matchesValue(item[colName], val);
         }
@@ -121,6 +135,7 @@ function matchesWhere(item: any, condition: any): boolean {
             return matchesValue(item[k], val);
           }
         }
+        return false;
       }
     }
 
@@ -141,6 +156,7 @@ function matchesWhere(item: any, condition: any): boolean {
                   return matchesValue(item[k], val);
                 }
               }
+              return false;
             }
           }
         }
@@ -298,13 +314,16 @@ function createInMemoryDb() {
           whereClause = cond;
           return chain;
         },
+        returning() {
+          return chain;
+        },
         then(resolve: any, reject: any) {
           const name = getTableName(table);
-          if (tables.has(name)) {
-            const data = tables.get(name)!;
-            const remaining = whereClause ? data.filter((item) => !matchesWhere(item, whereClause)) : [];
-            tables.set(name, remaining);
-          }
+          const data = getTableData(table);
+          const remaining = whereClause ? data.filter((item) => !matchesWhere(item, whereClause)) : [];
+          data.length = 0;
+          data.push(...remaining);
+          tables.set(name, data);
           return Promise.resolve([]).then(resolve, reject);
         },
         catch(reject: any) {

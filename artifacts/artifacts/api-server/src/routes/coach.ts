@@ -437,8 +437,68 @@ router.post("/coach/tasks", async (req, res): Promise<void> => {
   res.status(201).json(task);
 });
 
-// PATCH /coach/tasks/:id — update task status
-router.patch("/coach/tasks/:id", async (req, res): Promise<void> => {
+// GET /coach/board — full board for current user
+router.get("/coach/board", async (req, res): Promise<void> => {
+  const userId = await getUserFromToken(req.headers.authorization);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  let [plan] = await db
+    .select()
+    .from(coachPlansTable)
+    .where(eq(coachPlansTable.userId, userId))
+    .orderBy(desc(coachPlansTable.createdAt))
+    .limit(1);
+
+  if (!plan) {
+    // Auto-create starter plan for user
+    const [newPlan] = await db
+      .insert(coachPlansTable)
+      .values({
+        userId,
+        goal: "Accelerate Business Growth and Scale Operations",
+        productivityScore: 0,
+        streakDays: 1,
+        weekNumber: 1,
+        bottlenecks: ["capital", "customers"],
+        resources: [],
+        roles: ["Founder / Operator"],
+      })
+      .returning();
+    plan = newPlan;
+
+    // Generate starter tasks
+    const starterTasks = generateTasks(["capital", "customers"], 1);
+    if (starterTasks.length > 0) {
+      const now = new Date();
+      const taskRows = starterTasks.slice(0, 4).map((t, i) => {
+        const due = new Date(now);
+        due.setDate(due.getDate() + i + 1);
+        return {
+          planId: plan.id,
+          userId,
+          title: t.title,
+          description: t.description,
+          reason: t.reason,
+          priority: t.priority as "high" | "medium" | "low",
+          estimatedMinutes: t.estimatedMinutes,
+          evidenceRequired: t.evidenceRequired,
+          weekNumber: 1,
+          dueDate: due,
+          status: "not_started" as const,
+        };
+      });
+      await db.insert(coachTasksTable).values(taskRows);
+    }
+  }
+
+  const allTasks = await db.select().from(coachTasksTable);
+  const tasks = allTasks.filter((t: any) => Number(t.userId) === Number(userId) || (plan && Number(t.planId) === Number(plan.id)));
+
+  res.json({ plan, tasks });
+});
+
+// Update task handler for PATCH and PUT
+const handleTaskUpdate = async (req: any, res: any): Promise<void> => {
   const userId = await getUserFromToken(req.headers.authorization);
   if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
@@ -446,14 +506,18 @@ router.patch("/coach/tasks/:id", async (req, res): Promise<void> => {
   const id = parseInt(raw, 10);
   if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
 
-  const [existing] = await db
-    .select()
-    .from(coachTasksTable)
-    .where(and(eq(coachTasksTable.id, id), eq(coachTasksTable.userId, userId)));
+  const allTasks = await db.select().from(coachTasksTable);
+  const existing = allTasks.find((t: any) => Number(t.id) === Number(id));
 
   if (!existing) { res.status(404).json({ error: "Not found" }); return; }
 
-  const allowed = ["status", "priority", "dueDate", "estimatedMinutes"];
+  // Strict tenant check: only the owning user can modify their task
+  if (Number(existing.userId) !== Number(userId)) {
+    res.status(403).json({ error: "Forbidden: You cannot modify another user's task" });
+    return;
+  }
+
+  const allowed = ["title", "description", "reason", "status", "priority", "dueDate", "estimatedMinutes"];
   const updates: Record<string, unknown> = { updatedAt: new Date() };
   for (const key of allowed) {
     if (key in req.body) updates[key] = req.body[key];
@@ -461,14 +525,6 @@ router.patch("/coach/tasks/:id", async (req, res): Promise<void> => {
 
   if (req.body.status === "completed" && existing.status !== "completed") {
     updates.completedAt = new Date();
-    // Update plan productivity score
-    await db
-      .update(coachPlansTable)
-      .set({
-        productivityScore: existing ? Math.min(100, 0) : 0, // updated below
-        updatedAt: new Date(),
-      })
-      .where(eq(coachPlansTable.id, existing.planId));
   }
 
   const [updated] = await db
@@ -477,22 +533,34 @@ router.patch("/coach/tasks/:id", async (req, res): Promise<void> => {
     .where(eq(coachTasksTable.id, id))
     .returning();
 
-  // Recalculate productivity score
-  const allTasks = await db
-    .select()
-    .from(coachTasksTable)
-    .where(eq(coachTasksTable.planId, existing.planId));
+  res.json(updated || { ...existing, ...updates });
+};
 
-  const total = allTasks.length;
-  const completed = allTasks.filter((t: any) => t.status === "completed").length + (req.body.status === "completed" ? 1 : 0);
-  const score = total > 0 ? Math.round((completed / total) * 100) : 0;
+router.patch("/coach/tasks/:id", handleTaskUpdate);
+router.put("/coach/tasks/:id", handleTaskUpdate);
 
-  await db
-    .update(coachPlansTable)
-    .set({ productivityScore: score, updatedAt: new Date() })
-    .where(eq(coachPlansTable.id, existing.planId));
+// DELETE /coach/tasks/:id — delete a task
+router.delete("/coach/tasks/:id", async (req, res): Promise<void> => {
+  const userId = await getUserFromToken(req.headers.authorization);
+  if (!userId) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  res.json(updated);
+  const raw = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  const id = parseInt(raw, 10);
+  if (isNaN(id)) { res.status(400).json({ error: "Invalid id" }); return; }
+
+  const allTasks = await db.select().from(coachTasksTable);
+  const existing = allTasks.find((t: any) => Number(t.id) === Number(id));
+
+  if (!existing) { res.status(404).json({ error: "Not found" }); return; }
+
+  // Strict tenant check
+  if (Number(existing.userId) !== Number(userId)) {
+    res.status(403).json({ error: "Forbidden: You cannot delete another user's task" });
+    return;
+  }
+
+  await db.delete(coachTasksTable).where(eq(coachTasksTable.id, id));
+  res.json({ success: true, deletedId: id });
 });
 
 // POST /coach/tasks/:id/evidence — attach evidence to a task

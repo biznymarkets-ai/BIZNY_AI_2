@@ -9,6 +9,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Sparkles, UserCheck } from "lucide-react";
+import GoogleAuthButton from "@/components/GoogleAuthButton";
+import BiznyLogo from "@/components/BiznyLogo";
 
 const loginSchema = z.object({
   email: z.string().min(1, { message: "Please enter your email address or persona identifier." }),
@@ -67,13 +69,23 @@ export default function Login() {
       <div className="w-full max-w-md">
         {/* Logo + branding */}
         <div className="flex flex-col items-center text-center mb-6">
-          <img src="/logo.jpg" alt="Bizny" className="w-14 h-14 rounded-2xl mb-4 shadow-sm border border-gray-100 object-cover" />
+          <BiznyLogo size="lg" showText={false} className="mb-4" />
           <h1 className="font-display font-bold text-2xl text-gray-900 tracking-tight">Log in to Bizny</h1>
           <p className="text-gray-500 mt-1 text-sm">Enter your email or persona handle to access your workspace</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+          <GoogleAuthButton mode="login" />
+
+          <div className="relative flex items-center justify-center">
+            <div className="border-t border-gray-100 w-full" />
+            <span className="bg-white px-3 text-xs text-gray-400 font-medium uppercase tracking-wider shrink-0">
+              Or with email
+            </span>
+            <div className="border-t border-gray-100 w-full" />
+          </div>
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField

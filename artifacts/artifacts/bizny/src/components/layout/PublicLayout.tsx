@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Sun, Moon } from "lucide-react";
+import BiznyLogo from "@/components/BiznyLogo";
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -10,8 +11,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo.jpg" alt="Bizny" className="h-8 w-8 rounded-full" />
-            <span className="font-display text-xl font-bold tracking-tight text-foreground">Bizny</span>
+            <BiznyLogo size="md" />
           </Link>
           <nav className="flex items-center gap-4">
             <button

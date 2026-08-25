@@ -31,26 +31,24 @@ async function enrichListing(listing: typeof listingsTable.$inferSelect) {
   };
 }
 
-router.get("/marketplace", async (req, res): Promise<void> => {
-  const params = ListListingsQueryParams.safeParse(req.query);
-  if (!params.success) {
-    res.status(400).json({ error: params.error.message });
-    return;
-  }
+const handleListingsGet = async (req: any, res: any): Promise<void> => {
+  const qParam = req.query.q || req.query.search || req.query.keyword;
+  const industryParam = req.query.industry;
+  const countryParam = req.query.country;
 
   let rows = await db.select().from(listingsTable).orderBy(listingsTable.createdAt);
 
-  if (params.data.industry) {
-    const ind = params.data.industry.toLowerCase();
-    rows = rows.filter(r => r.industry?.toLowerCase() === ind);
+  if (industryParam) {
+    const ind = String(industryParam).toLowerCase();
+    rows = rows.filter((r: any) => r.industry?.toLowerCase() === ind);
   }
-  if (params.data.country) {
-    const c = params.data.country.toLowerCase();
-    rows = rows.filter(r => r.country?.toLowerCase() === c);
+  if (countryParam) {
+    const c = String(countryParam).toLowerCase();
+    rows = rows.filter((r: any) => r.country?.toLowerCase() === c);
   }
-  if (params.data.search) {
-    const q = params.data.search.toLowerCase().trim();
-    rows = rows.filter(r =>
+  if (qParam) {
+    const q = String(qParam).toLowerCase().trim();
+    rows = rows.filter((r: any) =>
       r.businessName?.toLowerCase().includes(q) ||
       r.product?.toLowerCase().includes(q) ||
       r.description?.toLowerCase().includes(q) ||
@@ -60,7 +58,11 @@ router.get("/marketplace", async (req, res): Promise<void> => {
 
   const enriched = await Promise.all(rows.map(enrichListing));
   res.json(enriched);
-});
+};
+
+router.get("/marketplace", handleListingsGet);
+router.get("/marketplace/listings", handleListingsGet);
+router.get("/listings", handleListingsGet);
 
 router.post("/marketplace", async (req, res): Promise<void> => {
   const userId = await getUserFromToken(req.headers.authorization);
