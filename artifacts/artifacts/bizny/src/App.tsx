@@ -41,6 +41,7 @@ import About from "@/pages/About";
 import FounderMessage from "@/pages/FounderMessage";
 import ResearchPortal from "@/pages/ResearchPortal";
 import ResearchAdmin from "@/pages/ResearchAdmin";
+import AuthCallback from "@/pages/AuthCallback";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ function Router() {
       <Route path="/v2" component={HomeV2} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/auth/callback" component={AuthCallback} />
 
       <Route path="/dashboard">
         <AppRoute><Dashboard /></AppRoute>

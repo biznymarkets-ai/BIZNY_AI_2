@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { signInWithGoogle } from "@/lib/firebaseAuth";
-import { Loader2, ExternalLink, Copy, Check, ShieldAlert, Sparkles, ArrowRight } from "lucide-react";
+import { signInWithGoogleViaSupabase, isSupabaseConfigured } from "@/lib/supabaseClient";
+import { signInWithGoogle as signInWithFirebaseGoogle } from "@/lib/firebaseAuth";
+import { Loader2, ExternalLink, Copy, Check, ShieldAlert, Sparkles, ArrowRight, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -40,28 +41,41 @@ export default function GoogleAuthButton({
   const handleGoogleClick = async () => {
     setIsLoading(true);
     try {
-      const data = await signInWithGoogle();
-      setAuthToken(data.token);
-      toast({
-        title: data.isNewUser ? "Welcome to Bizny!" : "Welcome back!",
-        description: `Signed in as ${data.user?.name || data.user?.email}.`,
-      });
-      if (onSuccess) {
-        onSuccess(data.user, data.isNewUser);
-      } else {
-        setLocation("/dashboard");
+      // 1. Prioritize Supabase Google OAuth if configured
+      if (isSupabaseConfigured()) {
+        await signInWithGoogleViaSupabase();
+        // Browser redirects to Supabase Google OAuth provider and then back to /auth/callback
+        return;
+      }
+
+      // 2. Otherwise try Firebase Google OAuth
+      try {
+        const data = await signInWithFirebaseGoogle();
+        setAuthToken(data.token);
+        toast({
+          title: data.isNewUser ? "Welcome to Bizny!" : "Welcome back!",
+          description: `Signed in as ${data.user?.name || data.user?.email}.`,
+        });
+        if (onSuccess) {
+          onSuccess(data.user, data.isNewUser);
+        } else {
+          setLocation("/dashboard");
+        }
+      } catch (fbErr: any) {
+        console.warn("Firebase Auth attempt:", fbErr);
+        if (
+          fbErr?.message?.includes("Domain unauthorized in Firebase Auth") ||
+          fbErr?.code === "auth/unauthorized-domain" ||
+          fbErr?.code === "auth/configuration-not-found"
+        ) {
+          setShowDomainModal(true);
+        } else {
+          setShowDomainModal(true);
+        }
       }
     } catch (err: any) {
       console.error("Google Auth error:", err);
-      if (err?.message?.includes("Domain unauthorized in Firebase Auth") || err?.code === "auth/unauthorized-domain") {
-        setShowDomainModal(true);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Google Sign-In",
-          description: err?.message || "Could not complete Google authentication. Please try again.",
-        });
-      }
+      setShowDomainModal(true);
     } finally {
       setIsLoading(false);
     }

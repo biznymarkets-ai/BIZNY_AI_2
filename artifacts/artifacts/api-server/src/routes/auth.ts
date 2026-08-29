@@ -28,7 +28,34 @@ export function parseUserIdFromToken(token: string): number | null {
 export async function getUserFromToken(authHeader: string | undefined): Promise<number | null> {
   if (!authHeader) return null;
   const token = authHeader.replace(/^Bearer\s+/i, "").trim();
-  return parseUserIdFromToken(token);
+  
+  // 1. Bizny session token (e.g. bizny_token_1_...)
+  const parsedId = parseUserIdFromToken(token);
+  if (parsedId !== null) return parsedId;
+
+  // 2. Supabase JWT Token format (3 parts base64)
+  if (token.includes(".") && token.split(".").length === 3) {
+    try {
+      const parts = token.split(".");
+      const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf-8"));
+      const sub = payload?.sub;
+      const email = payload?.email?.toLowerCase();
+
+      if (sub || email) {
+        const allUsers = await db.select().from(usersTable);
+        const match = allUsers.find(
+          (u: any) =>
+            (sub && u.supabaseAuthId === sub) ||
+            (email && u.email?.toLowerCase() === email)
+        );
+        if (match) return Number(match.id);
+      }
+    } catch (err) {
+      console.warn("[Auth] Failed to decode JWT token:", err);
+    }
+  }
+
+  return null;
 }
 
 function normalizeUser(user: any): any {
@@ -280,6 +307,84 @@ router.post("/auth/google", async (req, res): Promise<void> => {
   // Sync to Firestore in background
   saveUserToFirestore(safeUser).catch((e) => console.warn("Firestore sync warning:", e));
 
+  const token = makeToken(safeUser.id);
+  res.json({ token, user: safeUser, isNewUser });
+});
+
+router.post("/auth/supabase", async (req, res): Promise<void> => {
+  const email = String(req.body?.email || "").trim().toLowerCase();
+  const name = String(req.body?.name || "").trim();
+  const avatarUrl = String(req.body?.avatarUrl || req.body?.photoURL || "").trim();
+  const supabaseUid = String(req.body?.supabaseUid || req.body?.sub || req.body?.id || "").trim();
+
+  if (!email || !email.includes("@")) {
+    res.status(400).json({ error: "A valid email is required for Supabase authentication" });
+    return;
+  }
+
+  // 1. Search if user already exists in usersTable by supabaseAuthId or email
+  let allUsers = await db.select().from(usersTable);
+  let user = allUsers.find(
+    (u: any) =>
+      (supabaseUid && u.supabaseAuthId === supabaseUid) ||
+      u.email?.toLowerCase() === email
+  );
+
+  let isNewUser = false;
+
+  // 2. If user does not exist, create new user account
+  if (!user) {
+    isNewUser = true;
+    const displayName = name || email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    try {
+      const [inserted] = await db.insert(usersTable).values({
+        name: displayName,
+        email,
+        avatarUrl: avatarUrl || null,
+        supabaseAuthId: supabaseUid || null,
+        country: "Nigeria",
+        industry: "General",
+        role: "Founder / Entrepreneur",
+        verificationStatus: "unverified",
+        createdAt: new Date(),
+      }).returning();
+      user = inserted;
+    } catch (err) {
+      console.warn("[Auth:Supabase] DB insert fallback:", err);
+      user = {
+        id: Math.floor(Date.now() / 1000) + Math.floor(Math.random() * 1000),
+        name: displayName,
+        email,
+        avatarUrl: avatarUrl || null,
+        supabaseAuthId: supabaseUid || null,
+        country: "Nigeria",
+        industry: "General",
+        role: "Founder / Entrepreneur",
+        verificationStatus: "unverified",
+        createdAt: new Date(),
+      };
+    }
+  } else {
+    // If user exists, update supabaseAuthId or avatar if missing
+    const updates: any = {};
+    if (supabaseUid && !user.supabaseAuthId) {
+      updates.supabaseAuthId = supabaseUid;
+      user.supabaseAuthId = supabaseUid;
+    }
+    if (avatarUrl && !user.avatarUrl) {
+      updates.avatarUrl = avatarUrl;
+      user.avatarUrl = avatarUrl;
+    }
+    if (Object.keys(updates).length > 0) {
+      try {
+        await db.update(usersTable).set(updates).where(eq(usersTable.id, user.id));
+      } catch (err) {
+        console.warn("[Auth:Supabase] Could not update user link:", err);
+      }
+    }
+  }
+
+  const safeUser = normalizeUser(user);
   const token = makeToken(safeUser.id);
   res.json({ token, user: safeUser, isNewUser });
 });

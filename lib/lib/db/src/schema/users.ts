@@ -28,6 +28,7 @@ export const usersTable = pgTable("users", {
   phone: text("phone"),
   website: text("website"),
   publicSlug: text("public_slug").unique(),
+  supabaseAuthId: text("supabase_auth_id").unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
